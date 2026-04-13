@@ -1,55 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Norte Motor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
       font-family: Arial;
-      background: #f5f5f5;
+      background: #f4f6f9;
     }
 
     header {
       background: #0A1F44;
       color: white;
-      padding: 15px;
       display: flex;
       justify-content: space-between;
+      padding: 15px 30px;
+      align-items: center;
     }
 
     .logo {
+      font-size: 22px;
       font-weight: bold;
-      color: orange;
+      color: #F97316;
+    }
+
+    .menu {
+      color: white;
     }
 
     .hero {
-      background: url('https://images.unsplash.com/photo-1549921296-3ecf0f6d8b73');
+      background: url('https://images.unsplash.com/photo-1493238792000-8113da705763');
       background-size: cover;
-      padding: 100px 20px;
+      padding: 120px 20px;
       color: white;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 40px;
     }
 
     .btn {
       background: #F97316;
-      padding: 10px 20px;
       color: white;
+      padding: 12px 25px;
+      border-radius: 6px;
       text-decoration: none;
-      border-radius: 5px;
     }
 
-    .grid {
+    .categories {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
-      padding: 20px;
+      padding: 30px;
+    }
+
+    .cat {
+      background: white;
+      padding: 25px;
+      text-align: center;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .section {
+      padding: 20px 30px;
+    }
+
+    .cars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
 
     .card {
       background: white;
-      padding: 10px;
       border-radius: 10px;
+      overflow: hidden;
     }
+
+    .card img {
+      width: 100%;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .price {
+      color: #F97316;
+      font-weight: bold;
+    }
+
+    .whatsapp {
+      display: inline-block;
+      margin-top: 10px;
+      background: #25D366;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    footer {
+      background: #0A1F44;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    @media(max-width: 768px){
+      .categories, .cars {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -57,7 +126,7 @@
 
 <header>
   <div class="logo">NORTE MOTOR</div>
-  <div>Autos | Camionetas | Motos | Embarcaciones</div>
+  <div class="menu">Autos | Camionetas | Motos | Embarcaciones</div>
 </header>
 
 <section class="hero">
@@ -65,13 +134,54 @@
   <a class="btn" href="#">Buscar</a>
 </section>
 
-<section class="grid">
-  <div class="card">
-    <h3>Auto ejemplo</h3>
-    <p>$10.000</p>
-    <a class="btn" href="https://wa.me/549341XXXXXXX">WhatsApp</a>
+<section class="categories">
+  <div class="cat">🚗 Autos</div>
+  <div class="cat">🚙 Camionetas</div>
+  <div class="cat">🏍️ Motos</div>
+  <div class="cat">🚤 Embarcaciones</div>
+</section>
+
+<section class="section">
+  <h2>Vehículos destacados</h2>
+
+  <div class="cars">
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1555215695-3004980ad54c">
+      <div class="card-body">
+        <h3>Ford Ranger 2020</h3>
+        <p class="price">$25.000 USD</p>
+        <a class="whatsapp" href="https://wa.me/549341XXXXXXX">Contactar por WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a">
+      <div class="card-body">
+        <h3>Chevrolet Cruze 2018</h3>
+        <p class="price">$15.000 USD</p>
+        <a class="whatsapp" href="https://wa.me/549341XXXXXXX">Contactar por WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c">
+      <div class="card-body">
+        <h3>Honda CB500</h3>
+        <p class="price">$8.000 USD</p>
+        <a class="whatsapp" href="https://wa.me/549341XXXXXXX">Contactar por WhatsApp</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
+<footer>
+  © 2026 Norte Motor - Todos los derechos reservados
+</footer>
+
 </body>
 </html>
+
+
+   
