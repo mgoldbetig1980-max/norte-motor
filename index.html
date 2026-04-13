@@ -1,187 +1,172 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Norte Motor</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Norte Motor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #f4f6f9;
-    }
+<style>
+body { margin:0; font-family:Arial; background:#f4f6f9; }
 
-    header {
-      background: #0A1F44;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      padding: 15px 30px;
-      align-items: center;
-    }
+header {
+  background:#0A1F44;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+}
 
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-      color: #F97316;
-    }
+.logo { color:#F97316; font-weight:bold; }
 
-    .menu {
-      color: white;
-    }
+.hero {
+  padding:40px;
+  text-align:center;
+}
 
-    .hero {
-      background: url('https://images.unsplash.com/photo-1493238792000-8113da705763');
-      background-size: cover;
-      padding: 120px 20px;
-      color: white;
-      text-align: center;
-    }
+.filters {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 
-    .hero h1 {
-      font-size: 40px;
-    }
+.filter-btn {
+  background:#0A1F44;
+  color:white;
+  padding:10px 15px;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+}
 
-    .btn {
-      background: #F97316;
-      color: white;
-      padding: 12px 25px;
-      border-radius: 6px;
-      text-decoration: none;
-    }
+.filter-btn.active {
+  background:#F97316;
+}
 
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      padding: 30px;
-    }
+.cars {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  padding:20px;
+}
 
-    .cat {
-      background: white;
-      padding: 25px;
-      text-align: center;
-      border-radius: 10px;
-      font-weight: bold;
-    }
+.card {
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+}
 
-    .section {
-      padding: 20px 30px;
-    }
+.card img { width:100%; }
 
-    .cars {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
+.card-body { padding:15px; }
 
-    .card {
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-    }
+.price { color:#F97316; font-weight:bold; }
 
-    .card img {
-      width: 100%;
-    }
+.btn {
+  background:#25D366;
+  color:white;
+  padding:10px;
+  text-decoration:none;
+  display:inline-block;
+  margin-top:10px;
+}
 
-    .card-body {
-      padding: 15px;
-    }
-
-    .price {
-      color: #F97316;
-      font-weight: bold;
-    }
-
-    .whatsapp {
-      display: inline-block;
-      margin-top: 10px;
-      background: #25D366;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      text-decoration: none;
-    }
-
-    footer {
-      background: #0A1F44;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 30px;
-    }
-
-    @media(max-width: 768px){
-      .categories, .cars {
-        grid-template-columns: 1fr;
-      }
-    }
-
-  </style>
+@media(max-width:768px){
+  .cars { grid-template-columns:1fr; }
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <div class="logo">NORTE MOTOR</div>
-  <div class="menu">Autos | Camionetas | Motos | Embarcaciones</div>
+  <div>Marketplace de vehículos</div>
 </header>
 
 <section class="hero">
-  <h1>Encontrá tu próximo vehículo</h1>
-  <a class="btn" href="#">Buscar</a>
-</section>
+  <h2>Filtrar vehículos</h2>
 
-<section class="categories">
-  <div class="cat">🚗 Autos</div>
-  <div class="cat">🚙 Camionetas</div>
-  <div class="cat">🏍️ Motos</div>
-  <div class="cat">🚤 Embarcaciones</div>
-</section>
-
-<section class="section">
-  <h2>Vehículos destacados</h2>
-
-  <div class="cars">
-
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1555215695-3004980ad54c">
-      <div class="card-body">
-        <h3>Ford Ranger 2020</h3>
-        <p class="price">$25.000 USD</p>
-        <a class="whatsapp" href="https://wa.me/549341XXXXXXX">Contactar por WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a">
-      <div class="card-body">
-        <h3>Chevrolet Cruze 2018</h3>
-        <p class="price">$15.000 USD</p>
-        <a class="whatsapp" href="https://wa.me/549341XXXXXXX">Contactar por WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c">
-      <div class="card-body">
-        <h3>Honda CB500</h3>
-        <p class="price">$8.000 USD</p>
-        <a class="whatsapp" href="https://wa.me/549341XXXXXXX">Contactar por WhatsApp</a>
-      </div>
-    </div>
-
+  <div class="filters">
+    <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
+    <button class="filter-btn" onclick="filtrar('auto')">Autos</button>
+    <button class="filter-btn" onclick="filtrar('camioneta')">Camionetas</button>
+    <button class="filter-btn" onclick="filtrar('moto')">Motos</button>
+    <button class="filter-btn" onclick="filtrar('embarcacion')">Embarcaciones</button>
   </div>
 </section>
 
-<footer>
-  © 2026 Norte Motor - Todos los derechos reservados
-</footer>
+<section class="cars" id="cars"></section>
+
+<script>
+const autos = [
+  {
+    nombre: "Ford Ranger 2020",
+    precio: "$25.000 USD",
+    categoria: "camioneta",
+    img: "https://images.unsplash.com/photo-1555215695-3004980ad54c",
+    whatsapp: "549341XXXXXXX"
+  },
+  {
+    nombre: "Chevrolet Cruze 2018",
+    precio: "$15.000 USD",
+    categoria: "auto",
+    img: "https://images.unsplash.com/photo-1502877338535-766e1452684a",
+    whatsapp: "549341XXXXXXX"
+  },
+  {
+    nombre: "Honda CB500",
+    precio: "$8.000 USD",
+    categoria: "moto",
+    img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c",
+    whatsapp: "549341XXXXXXX"
+  },
+  {
+    nombre: "Lancha Bayliner",
+    precio: "$12.000 USD",
+    categoria: "embarcacion",
+    img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    whatsapp: "549341XXXXXXX"
+  }
+];
+
+const container = document.getElementById("cars");
+
+function mostrarAutos(lista) {
+  container.innerHTML = "";
+  lista.forEach(auto => {
+    container.innerHTML += `
+      <div class="card">
+        <img src="${auto.img}">
+        <div class="card-body">
+          <h3>${auto.nombre}</h3>
+          <p class="price">${auto.precio}</p>
+          <a class="btn" href="https://wa.me/${auto.whatsapp}">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filtrar(categoria) {
+  const botones = document.querySelectorAll(".filter-btn");
+  botones.forEach(btn => btn.classList.remove("active"));
+  event.target.classList.add("active");
+
+  if(categoria === "todos") {
+    mostrarAutos(autos);
+  } else {
+    const filtrados = autos.filter(a => a.categoria === categoria);
+    mostrarAutos(filtrados);
+  }
+}
+
+// Mostrar todos al inicio
+mostrarAutos(autos);
+</script>
 
 </body>
 </html>
-const autos = [ ... ]
-
-   
