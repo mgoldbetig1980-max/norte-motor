@@ -1,172 +1,36 @@
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Norte Motor</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body { margin:0; font-family:Arial; background:#f4f6f9; }
-
-header {
-  background:#0A1F44;
-  color:white;
-  display:flex;
-  justify-content:space-between;
-  padding:15px 30px;
-}
-
-.logo { color:#F97316; font-weight:bold; }
-
-.hero {
-  padding:40px;
-  text-align:center;
-}
-
-.filters {
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.filter-btn {
-  background:#0A1F44;
-  color:white;
-  padding:10px 15px;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
-}
-
-.filter-btn.active {
-  background:#F97316;
-}
-
-.cars {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  padding:20px;
-}
-
-.card {
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.card img { width:100%; }
-
-.card-body { padding:15px; }
-
-.price { color:#F97316; font-weight:bold; }
-
-.btn {
-  background:#25D366;
-  color:white;
-  padding:10px;
-  text-decoration:none;
-  display:inline-block;
-  margin-top:10px;
-}
-
-@media(max-width:768px){
-  .cars { grid-template-columns:1fr; }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <div class="logo">NORTE MOTOR</div>
-  <div>Marketplace de vehículos</div>
-</header>
-
-<section class="hero">
-  <h2>Filtrar vehículos</h2>
-
-  <div class="filters">
-    <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
-    <button class="filter-btn" onclick="filtrar('auto')">Autos</button>
-    <button class="filter-btn" onclick="filtrar('camioneta')">Camionetas</button>
-    <button class="filter-btn" onclick="filtrar('moto')">Motos</button>
-    <button class="filter-btn" onclick="filtrar('embarcacion')">Embarcaciones</button>
-  </div>
-</section>
-
-<section class="cars" id="cars"></section>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
 
 <script>
-const autos = [
-  {
-    nombre: "Ford Ranger 2020",
-    precio: "$25.000 USD",
-    categoria: "camioneta",
-    img: "https://images.unsplash.com/photo-1555215695-3004980ad54c",
-    whatsapp: "549341XXXXXXX"
-  },
-  {
-    nombre: "Chevrolet Cruze 2018",
-    precio: "$15.000 USD",
-    categoria: "auto",
-    img: "https://images.unsplash.com/photo-1502877338535-766e1452684a",
-    whatsapp: "549341XXXXXXX"
-  },
-  {
-    nombre: "Honda CB500",
-    precio: "$8.000 USD",
-    categoria: "moto",
-    img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c",
-    whatsapp: "549341XXXXXXX"
-  },
-  {
-    nombre: "Lancha Bayliner",
-    precio: "$12.000 USD",
-    categoria: "embarcacion",
-    img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    whatsapp: "549341XXXXXXX"
-  }
-];
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_DOMINIO",
+  projectId: "TU_ID",
+};
 
-const container = document.getElementById("cars");
+firebase.initializeApp(firebaseConfig);
 
-function mostrarAutos(lista) {
-  container.innerHTML = "";
-  lista.forEach(auto => {
-    container.innerHTML += `
-      <div class="card">
-        <img src="${auto.img}">
-        <div class="card-body">
-          <h3>${auto.nombre}</h3>
-          <p class="price">${auto.precio}</p>
-          <a class="btn" href="https://wa.me/${auto.whatsapp}">
-            WhatsApp
-          </a>
-        </div>
-      </div>
-    `;
-  });
+const auth = firebase.auth();
+
+// REGISTRO
+function registrar() {
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("pass").value;
+
+  auth.createUserWithEmailAndPassword(email, pass)
+    .then(() => alert("Usuario creado"))
+    .catch(err => alert(err.message));
 }
 
-function filtrar(categoria) {
-  const botones = document.querySelectorAll(".filter-btn");
-  botones.forEach(btn => btn.classList.remove("active"));
-  event.target.classList.add("active");
+// LOGIN
+function login() {
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("pass").value;
 
-  if(categoria === "todos") {
-    mostrarAutos(autos);
-  } else {
-    const filtrados = autos.filter(a => a.categoria === categoria);
-    mostrarAutos(filtrados);
-  }
+  auth.signInWithEmailAndPassword(email, pass)
+    .then(() => alert("Bienvenido"))
+    .catch(err => alert(err.message));
 }
-
-// Mostrar todos al inicio
-mostrarAutos(autos);
 </script>
 
-</body>
-</html>
+
