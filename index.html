@@ -171,10 +171,14 @@ window.publicar = async function() {
 // MOSTRAR AUTOS
 onSnapshot(collection(db, "autos"), (snapshot) => {
   cars.innerHTML = "";
+  misAutos.innerHTML = "";
+
+  const user = auth.currentUser;
 
   snapshot.forEach(doc => {
     const auto = doc.data();
 
+    // TODOS LOS AUTOS (público)
     cars.innerHTML += `
       <div class="card">
         <img src="${auto.img}">
@@ -182,11 +186,25 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
           <h3>${auto.nombre}</h3>
           <p>${auto.precio}</p>
           <a class="btn" href="https://wa.me/${auto.telefono}" target="_blank">
-            Contactar por WhatsApp
+            WhatsApp
           </a>
         </div>
       </div>
     `;
+
+    // SOLO MIS AUTOS
+    if (user && auto.user === user.email) {
+      misAutos.innerHTML += `
+        <div class="card">
+          <img src="${auto.img}">
+          <div class="card-body">
+            <h3>${auto.nombre}</h3>
+            <p>${auto.precio}</p>
+            <p>Publicado por vos</p>
+          </div>
+        </div>
+      `;
+    }
   });
 });
 </script>
