@@ -3,66 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <title>Norte Motor</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { margin:0; font-family:'Segoe UI'; background:#eef2f7; }
-
-nav {
-  background:#0A1F44;
+body {
+  margin:0;
+  font-family: Arial;
+  background:#111;
   color:white;
+}
+
+/* TOP BAR */
+.topbar {
+  background:#f97316;
+  padding:15px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+}
+
+/* MENU */
+.menu {
+  background:#1f1f1f;
   display:flex;
-  justify-content:space-between;
-  padding:15px 20px;
+  padding:10px;
+  gap:20px;
 }
 
-.hero {
-  background:linear-gradient(90deg,#0A1F44,#1e3a8a);
-  color:white;
-  text-align:center;
-  padding:60px 20px;
+.menu div {
+  cursor:pointer;
 }
 
-.container {
-  background:white;
-  margin:20px auto;
+/* LAYOUT */
+.main {
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width:250px;
+  background:#222;
   padding:20px;
-  border-radius:12px;
-  width:90%;
-  max-width:500px;
-  text-align:center;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-input,select {
-  padding:12px;
-  margin:8px;
-  width:90%;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-
-button {
-  padding:12px 20px;
-  margin:8px;
-  background:#F97316;
+.sidebar button {
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  background:#f97316;
   color:white;
   border:none;
-  border-radius:8px;
 }
 
+/* CONTENT */
+.content {
+  flex:1;
+  padding:20px;
+}
+
+/* GRID */
 .cars {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:20px;
-  padding:20px;
 }
 
+/* CARD */
 .card {
-  background:white;
-  border-radius:15px;
+  background:#1f1f1f;
+  border-radius:10px;
   overflow:hidden;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
 .card img {
@@ -71,66 +80,48 @@ button {
   object-fit:cover;
 }
 
-.card-body { padding:15px; }
+.card-body {
+  padding:10px;
+}
 
 .btn {
   background:#25D366;
+  padding:8px;
+  display:inline-block;
   color:white;
-  padding:10px;
-  border-radius:8px;
   text-decoration:none;
-}
-
-#whatsappBtn {
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#25D366;
-  color:white;
-  font-size:24px;
-  padding:15px;
-  border-radius:50%;
 }
 </style>
 </head>
 
 <body>
 
-<nav>
-  <strong>Norte Motor</strong>
-</nav>
+<div class="topbar">NORTE MOTOR 🚗</div>
 
-<div class="hero">
-  <h1>Comprá y vendé vehículos fácil</h1>
-  <p>Autos, motos, camionetas y embarcaciones</p>
+<div class="menu">
+  <div>Autos</div>
+  <div>Camionetas</div>
+  <div>Motos</div>
+  <div>Embarcaciones</div>
 </div>
 
-<div class="container">
-  <input id="busqueda" placeholder="Buscar..." onkeyup="filtrarAutos()">
-  <select id="categoria" onchange="filtrarAutos()">
-    <option value="todos">Todas</option>
-    <option value="auto">Autos</option>
-    <option value="camioneta">Camionetas</option>
-    <option value="moto">Motos</option>
-    <option value="embarcacion">Embarcaciones</option>
-  </select>
-</div>
+<div class="main">
 
-<div class="container">
-  <h3>Login</h3>
-  <input id="email"><br>
+<div class="sidebar">
+  <h3>Usuario</h3>
+  <input id="email" placeholder="Email"><br>
   <input id="pass" type="password"><br>
-  <button onclick="registrar()">Registrarse</button>
-  <button onclick="login()">Login</button>
-  <button onclick="loginGoogle()">Google</button>
-</div>
 
-<div class="container">
+  <button onclick="login()">Login</button>
+  <button onclick="registrar()">Registrarse</button>
+
+  <hr>
+
   <h3>Publicar</h3>
-  <input id="nombre"><br>
-  <input id="precio"><br>
+  <input id="nombre" placeholder="Nombre"><br>
+  <input id="precio" placeholder="Precio"><br>
   <input type="file" id="file"><br>
-  <input id="telefono"><br>
+  <input id="telefono" placeholder="Teléfono"><br>
 
   <select id="categoriaInput">
     <option value="auto">Auto</option>
@@ -142,23 +133,21 @@ button {
   <button onclick="publicar()">Publicar</button>
 </div>
 
-<div class="container">
-  <h3>Mis autos</h3>
-  <div id="misAutos"></div>
+<div class="content">
+  <h2>Vehículos</h2>
+  <div class="cars" id="cars"></div>
 </div>
 
-<section class="cars" id="cars"></section>
-
-<a href="https://wa.me/549341XXXXXXX" target="_blank" id="whatsappBtn">💬</a>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey:"AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE"
+  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
   storageBucket: "norte-motor.appspot.com",
@@ -171,84 +160,43 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-let listaAutos=[];
+window.login = () => signInWithEmailAndPassword(auth,email.value,pass.value);
+window.registrar = () => createUserWithEmailAndPassword(auth,email.value,pass.value);
 
-window.registrar=()=>createUserWithEmailAndPassword(auth,email.value,pass.value);
-window.login=()=>signInWithEmailAndPassword(auth,email.value,pass.value);
+window.publicar = async () => {
+  if (!auth.currentUser) return alert("Login primero");
 
-window.loginGoogle=()=>{
- const provider=new GoogleAuthProvider();
- signInWithPopup(auth,provider);
+  const archivo = file.files[0];
+  const refImg = ref(storage,"autos/"+Date.now()+archivo.name);
+
+  await uploadBytes(refImg,archivo);
+  const url = await getDownloadURL(refImg);
+
+  await addDoc(collection(db,"autos"),{
+    nombre:nombre.value,
+    precio:precio.value,
+    img:url,
+    telefono:telefono.value,
+    categoria:categoriaInput.value
+  });
 };
-
-window.publicar=async()=>{
- if(!auth.currentUser) return alert("Login primero");
-
- let archivo=file.files[0];
- let refImg=ref(storage,"autos/"+Date.now()+archivo.name);
- await uploadBytes(refImg,archivo);
- let url=await getDownloadURL(refImg);
-
- await addDoc(collection(db,"autos"),{
-  nombre:nombre.value,
-  precio:precio.value,
-  img:url,
-  telefono:telefono.value,
-  categoria:categoriaInput.value,
-  user:auth.currentUser.email
- });
-};
-
-window.eliminarAuto=id=>deleteDoc(doc(db,"autos",id));
 
 onSnapshot(collection(db,"autos"),snap=>{
- listaAutos=[];
- snap.forEach(d=>{
-  let a=d.data();
-  a.id=d.id;
-  listaAutos.push(a);
- });
- mostrarAutos(listaAutos);
-});
+  cars.innerHTML="";
+  snap.forEach(d=>{
+    let a=d.data();
 
-function filtrarAutos(){
- let t=busqueda.value.toLowerCase();
- let c=categoria.value;
- mostrarAutos(listaAutos.filter(a=>
-  a.nombre.toLowerCase().includes(t) &&
-  (c==="todos"||a.categoria===c)
- ));
-}
-
-function mostrarAutos(lista){
- cars.innerHTML="";
- misAutos.innerHTML="";
- let user=auth.currentUser;
-
- lista.forEach(a=>{
-  cars.innerHTML+=`
-  <div class="card">
-    <img src="${a.img}">
-    <div class="card-body">
-      <h3>${a.nombre}</h3>
-      <p>${a.precio}</p>
-      <p>📌 ${a.categoria}</p>
-      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">WhatsApp</a>
-    </div>
-  </div>`;
-
-  if(user && user.email===a.user){
-    misAutos.innerHTML+=`
+    cars.innerHTML+=`
     <div class="card">
       <img src="${a.img}">
       <div class="card-body">
         <h3>${a.nombre}</h3>
-        <button onclick="eliminarAuto('${a.id}')">Eliminar</button>
+        <p>${a.precio}</p>
+        <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">WhatsApp</a>
       </div>
     </div>`;
-  }
- });
-}
+  });
+});
 </script>
 
 </body>
