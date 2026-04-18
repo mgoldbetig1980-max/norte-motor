@@ -3,60 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <title>Norte Motor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin:0;
-  font-family: Arial;
-  background:#0f172a;
+body { margin:0; font-family: Arial; background:#f3f4f6; }
+
+/* HEADER */
+header {
+  background:#1e3a8a;
   color:white;
+  display:flex;
+  justify-content:space-between;
+  padding:15px 20px;
 }
 
-.topbar {
-  background:#f97316;
-  padding:15px;
+header a {
+  color:white;
+  margin:10px;
+  text-decoration:none;
+}
+
+/* HERO */
+.hero {
+  background:url('https://images.unsplash.com/photo-1549921296-3a6bfe57a0a9') center/cover;
+  padding:100px 20px;
+  color:white;
   text-align:center;
-  font-size:22px;
-  font-weight:bold;
 }
 
-.menu {
-  background:#1e293b;
-  display:flex;
+.hero h1 { font-size:40px; }
+
+/* BUSCADOR */
+.search {
+  margin-top:20px;
+}
+
+.search input {
   padding:10px;
-  gap:20px;
-}
-
-.main {
-  display:flex;
-}
-
-.sidebar {
-  width:260px;
-  background:#020617;
-  padding:20px;
-}
-
-.sidebar input, .sidebar select {
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
-
-.sidebar button {
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-  background:#f97316;
+  margin:5px;
+  border-radius:5px;
   border:none;
-  color:white;
-  cursor:pointer;
 }
 
-.content {
-  flex:1;
+/* CATEGORIAS */
+.categorias {
+  display:flex;
+  justify-content:space-around;
   padding:20px;
 }
+
+.cat {
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+}
+
+/* CARDS */
+.section { padding:20px; }
 
 .cars {
   display:grid;
@@ -65,14 +69,14 @@ body {
 }
 
 .card {
-  background:#1e293b;
+  background:white;
   border-radius:10px;
   overflow:hidden;
 }
 
 .card img {
   width:100%;
-  height:180px;
+  height:150px;
   object-fit:cover;
 }
 
@@ -81,153 +85,75 @@ body {
 }
 
 .btn {
-  background:#25D366;
-  padding:8px;
-  display:inline-block;
+  background:#f97316;
   color:white;
+  padding:10px;
+  display:block;
+  text-align:center;
   text-decoration:none;
-  border-radius:5px;
 }
 
-.hidden { display:none; }
+/* FOOTER */
+footer {
+  background:#1e3a8a;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
 </style>
 </head>
 
 <body>
 
-<div class="topbar">NORTE MOTOR 🚗</div>
-
-<div class="menu">
-  <div>Autos</div>
-  <div>Camionetas</div>
-  <div>Motos</div>
-  <div>Embarcaciones</div>
-</div>
-
-<div class="main">
-
-<div class="sidebar">
-  <h3>Usuario</h3>
-  <input id="email" placeholder="Email">
-  <input id="pass" type="password" placeholder="Contraseña">
-
-  <button onclick="login()">Ingresar</button>
-  <button onclick="registrar()">Registrarse</button>
-  <button onclick="recuperar()">🔑 Olvidé mi contraseña</button>
-
-  <hr>
-
-  <!-- SOLO LOGUEADO -->
-  <div id="panelPublicar" class="hidden">
-  <h3>Publicar</h3>
-
-  <input id="nombre" placeholder="Nombre">
-  <input id="precio" placeholder="Precio">
-  <input type="file" id="file">
-  <input id="telefono" placeholder="Teléfono">
-
-  <select id="categoriaInput">
-    <option value="auto">Auto</option>
-    <option value="camioneta">Camioneta</option>
-    <option value="moto">Moto</option>
-    <option value="embarcacion">Embarcación</option>
-  </select>
-
-  <button onclick="publicar()">Publicar</button>
-</div>
-
-<div id="mensajeLogin">
-  🔒 Iniciá sesión para publicar
-</div>
-
-  <!-- MENSAJE SI NO ESTÁ LOGUEADO -->
-  <div id="mensajeLogin">
-    <p>🔒 Iniciá sesión para publicar</p>
+<header>
+  <strong>NORTE MOTOR</strong>
+  <div>
+    <a href="#">Inicio</a>
+    <a href="#">Autos</a>
+    <a href="#">Camionetas</a>
+    <a href="#">Motos</a>
+    <a href="#">Embarcaciones</a>
   </div>
+</header>
 
+<div class="hero">
+  <h1>Encontrá tu próximo vehículo</h1>
+  <div class="search">
+    <input placeholder="¿Qué buscás?">
+    <input placeholder="Precio máximo">
+    <button>Buscar</button>
+  </div>
 </div>
 
-<div class="content">
-  <h2>Vehículos disponibles</h2>
+<div class="categorias">
+  <div class="cat">🚗 Autos</div>
+  <div class="cat">🚙 Camionetas</div>
+  <div class="cat">🏍️ Motos</div>
+  <div class="cat">🚤 Embarcaciones</div>
+</div>
+
+<div class="section">
+  <h2>Últimos publicados</h2>
   <div class="cars" id="cars"></div>
 </div>
 
-</div>
+<footer>
+  © Norte Motor - Todos los derechos reservados
+</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
-  storageBucket: "norte-motor.appspot.com",
-  messagingSenderId: "192628890922",
-  appId: "1:192628890922:web:48bc1972f62216c3535253"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-// CONTROL LOGIN VISUAL
-onAuthStateChanged(auth, user => {
-  if(user){
-    panelPublicar.classList.remove("hidden");
-    mensajeLogin.classList.add("hidden");
-  } else {
-    panelPublicar.classList.add("hidden");
-    mensajeLogin.classList.remove("hidden");
-  }
-});
-
-// LOGIN
-window.login = () => {
-  signInWithEmailAndPassword(auth,email.value,pass.value)
-  .catch(e=>alert(e.message));
-};
-
-// REGISTRO
-window.registrar = () => {
-  createUserWithEmailAndPassword(auth,email.value,pass.value)
-  .catch(e=>alert(e.message));
-};
-
-// RECUPERAR
-window.recuperar = () => {
-  if (!email.value) return alert("Ingresá tu email");
-
-  sendPasswordResetEmail(auth,email.value)
-  .then(()=>alert("Revisá tu correo"))
-  .catch(e=>alert(e.message));
-};
-
-// PUBLICAR
-window.publicar = async () => {
-  if (!auth.currentUser) return alert("Login primero");
-
-  const archivo = file.files[0];
-  const refImg = ref(storage,"autos/"+Date.now()+archivo.name);
-
-  await uploadBytes(refImg,archivo);
-  const url = await getDownloadURL(refImg);
-
-  await addDoc(collection(db,"autos"),{
-    nombre:nombre.value,
-    precio:precio.value,
-    img:url,
-    telefono:telefono.value,
-    categoria:categoriaInput.value
-  });
-
-  alert("Publicado");
-};
-
-// MOSTRAR AUTOS
 onSnapshot(collection(db,"autos"),snap=>{
   cars.innerHTML="";
   snap.forEach(d=>{
@@ -239,7 +165,9 @@ onSnapshot(collection(db,"autos"),snap=>{
       <div class="card-body">
         <h3>${a.nombre}</h3>
         <p>${a.precio}</p>
-        <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">WhatsApp</a>
+        <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">
+          Contactar
+        </a>
       </div>
     </div>`;
   });
