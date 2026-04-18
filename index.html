@@ -198,21 +198,21 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
     `;
 
     // SOLO MIS AUTOS
-    if (user && auto.user === user.email) {
-      misAutos.innerHTML += `
-        <div class="card">
-          <img src="${auto.img}">
-          <div class="card-body">
-            <h3>${auto.nombre}</h3>
-            <p>${auto.precio}</p>
-            <p>Publicado por vos</p>
-          </div>
-        </div>
-      `;
-    }
-  });
-});
-</script>
+   if (user && auto.user === user.email) {
+  misAutos.innerHTML += `
+    <div class="card">
+      <img src="${auto.img}">
+      <div class="card-body">
+        <h3>${auto.nombre}</h3>
+        <p>${auto.precio}</p>
+        <p>Publicado por vos</p>
 
+        <button onclick="eliminarAuto('${doc.id}')">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  `;
+}
 </body>
 </html>
