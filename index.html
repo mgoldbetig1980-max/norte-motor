@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,63 +7,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { font-family: Arial; margin:0; background:#f4f6f9; }
+body {
+  font-family: 'Segoe UI', Arial;
+  margin: 0;
+  background: #eef2f7;
+}
 
 header {
-  background:#0A1F44;
-  color:white;
-  text-align:center;
-  padding:20px;
+  background: linear-gradient(90deg, #0A1F44, #1e3a8a);
+  color: white;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .container {
-  text-align:center;
-  padding:20px;
+  background: white;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  text-align: center;
 }
 
 input {
-  padding:10px;
-  margin:5px;
-  width:250px;
+  padding: 12px;
+  margin: 8px;
+  width: 90%;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
 button {
-  padding:10px 20px;
-  margin:5px;
-  background:#F97316;
-  color:white;
-  border:none;
-  cursor:pointer;
+  padding: 12px 20px;
+  margin: 8px;
+  background: #F97316;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ea580c;
 }
 
 .cars {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  padding:20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .card {
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.card img { width:100%; }
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
 
-.card-body { padding:15px; }
+.card-body {
+  padding: 15px;
+}
 
 .btn {
-  background:#25D366;
-  color:white;
-  padding:10px;
-  text-decoration:none;
-  display:inline-block;
-  margin-top:10px;
+  background: #25D366;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+h3 {
+  color: #0A1F44;
 }
 
 @media(max-width:768px){
-  .cars { grid-template-columns:1fr; }
+  .container { width: 95%; }
 }
 </style>
 </head>
@@ -70,7 +102,7 @@ button {
 <body>
 
 <header>
-  <h1>NORTE MOTOR</h1>
+  NORTE MOTOR 🚗
 </header>
 
 <div class="container">
@@ -82,11 +114,8 @@ button {
   <button onclick="login()">Login</button>
 </div>
 
-<hr>
-
 <div class="container">
   <h3>Publicar vehículo</h3>
-
   <input id="nombre" placeholder="Nombre"><br>
   <input id="precio" placeholder="Precio"><br>
   <input id="img" placeholder="URL imagen"><br>
@@ -107,7 +136,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔴 PEGAR TU CONFIG REAL ACA
 const firebaseConfig = {
   apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
@@ -117,12 +145,10 @@ const firebaseConfig = {
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// REGISTRO
 window.registrar = async function() {
   try {
     await createUserWithEmailAndPassword(auth, email.value, pass.value);
@@ -132,7 +158,6 @@ window.registrar = async function() {
   }
 }
 
-// LOGIN
 window.login = async function() {
   try {
     await signInWithEmailAndPassword(auth, email.value, pass.value);
@@ -142,10 +167,9 @@ window.login = async function() {
   }
 }
 
-// PUBLICAR
 window.publicar = async function() {
   if (!auth.currentUser) {
-    alert("Tenés que iniciar sesión");
+    alert("Iniciá sesión primero");
     return;
   }
 
@@ -157,15 +181,13 @@ window.publicar = async function() {
     user: auth.currentUser.email
   });
 
-  alert("Auto publicado");
+  alert("Publicado");
 }
 
-// ELIMINAR
 window.eliminarAuto = async function(id) {
   await deleteDoc(doc(db, "autos", id));
 }
 
-// MOSTRAR AUTOS
 onSnapshot(collection(db, "autos"), (snapshot) => {
   cars.innerHTML = "";
   misAutos.innerHTML = "";
@@ -176,7 +198,6 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
     const auto = d.data();
     const id = d.id;
 
-    // TODOS
     cars.innerHTML += `
       <div class="card">
         <img src="${auto.img}">
@@ -190,7 +211,6 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
       </div>
     `;
 
-    // MIS AUTOS
     if (user && auto.user === user.email) {
       misAutos.innerHTML += `
         <div class="card">
@@ -198,10 +218,7 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
           <div class="card-body">
             <h3>${auto.nombre}</h3>
             <p>${auto.precio}</p>
-
-            <button onclick="eliminarAuto('${id}')">
-              Eliminar
-            </button>
+            <button onclick="eliminarAuto('${id}')">Eliminar</button>
           </div>
         </div>
       `;
@@ -212,3 +229,7 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
 
 </body>
 </html>
+
+ 
+
+ 
