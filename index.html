@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { margin:0; font-family: Arial; background:#f3f4f6; }
+body { margin:0; font-family:Arial; background:#f3f4f6; }
 
 /* HEADER */
 header {
@@ -17,10 +17,12 @@ header {
   padding:15px 20px;
 }
 
-header a {
+header button {
+  background:#f97316;
   color:white;
-  margin:10px;
-  text-decoration:none;
+  border:none;
+  padding:10px;
+  cursor:pointer;
 }
 
 /* HERO */
@@ -29,20 +31,6 @@ header a {
   padding:100px 20px;
   color:white;
   text-align:center;
-}
-
-.hero h1 { font-size:40px; }
-
-/* BUSCADOR */
-.search {
-  margin-top:20px;
-}
-
-.search input {
-  padding:10px;
-  margin:5px;
-  border-radius:5px;
-  border:none;
 }
 
 /* CATEGORIAS */
@@ -56,7 +44,6 @@ header a {
   background:white;
   padding:20px;
   border-radius:10px;
-  text-align:center;
 }
 
 /* CARDS */
@@ -80,9 +67,7 @@ header a {
   object-fit:cover;
 }
 
-.card-body {
-  padding:10px;
-}
+.card-body { padding:10px; }
 
 .btn {
   background:#f97316;
@@ -93,13 +78,31 @@ header a {
   text-decoration:none;
 }
 
-/* FOOTER */
-footer {
-  background:#1e3a8a;
-  color:white;
-  padding:20px;
-  text-align:center;
+/* MODAL */
+.modal {
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
+
+.modal-content {
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+}
+
+input,select {
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+}
+
 </style>
 </head>
 
@@ -108,21 +111,13 @@ footer {
 <header>
   <strong>NORTE MOTOR</strong>
   <div>
-    <a href="#">Inicio</a>
-    <a href="#">Autos</a>
-    <a href="#">Camionetas</a>
-    <a href="#">Motos</a>
-    <a href="#">Embarcaciones</a>
+    <button onclick="abrirLogin()">Ingresar</button>
+    <button onclick="abrirPublicar()">Publicar</button>
   </div>
 </header>
 
 <div class="hero">
   <h1>Encontrá tu próximo vehículo</h1>
-  <div class="search">
-    <input placeholder="¿Qué buscás?">
-    <input placeholder="Precio máximo">
-    <button>Buscar</button>
-  </div>
 </div>
 
 <div class="categorias">
@@ -137,40 +132,99 @@ footer {
   <div class="cars" id="cars"></div>
 </div>
 
-<footer>
-  © Norte Motor - Todos los derechos reservados
-</footer>
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3>Login</h3>
+    <input id="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Contraseña">
+    <button onclick="login()">Ingresar</button>
+    <button onclick="registrar()">Registrarse</button>
+    <button onclick="recuperar()">Olvidé contraseña</button>
+  </div>
+</div>
+
+<!-- PUBLICAR MODAL -->
+<div class="modal" id="publicarModal">
+  <div class="modal-content">
+    <h3>Publicar</h3>
+    <input id="nombre" placeholder="Nombre">
+    <input id="precio" placeholder="Precio">
+    <input type="file" id="file">
+    <input id="telefono" placeholder="Teléfono">
+
+    <select id="categoriaInput">
+      <option value="auto">Auto</option>
+      <option value="camioneta">Camioneta</option>
+      <option value="moto">Moto</option>
+      <option value="embarcacion">Embarcación</option>
+    </select>
+
+    <button onclick="publicar()">Publicar</button>
+  </div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+  apiKey:"AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
+
+window.abrirLogin = ()=> loginModal.style.display="flex";
+
+window.abrirPublicar = ()=>{
+  if(!auth.currentUser) return alert("Debes iniciar sesión");
+  publicarModal.style.display="flex";
+};
+
+window.login = ()=> signInWithEmailAndPassword(auth,email.value,pass.value);
+window.registrar = ()=> createUserWithEmailAndPassword(auth,email.value,pass.value);
+window.recuperar = ()=> sendPasswordResetEmail(auth,email.value);
+
+window.publicar = async ()=>{
+ const archivo=file.files[0];
+ const refImg=ref(storage,"autos/"+Date.now()+archivo.name);
+
+ await uploadBytes(refImg,archivo);
+ const url=await getDownloadURL(refImg);
+
+ await addDoc(collection(db,"autos"),{
+  nombre:nombre.value,
+  precio:precio.value,
+  img:url,
+  telefono:telefono.value
+ });
+
+ alert("Publicado");
+ publicarModal.style.display="none";
+};
 
 onSnapshot(collection(db,"autos"),snap=>{
-  cars.innerHTML="";
-  snap.forEach(d=>{
-    let a=d.data();
+ cars.innerHTML="";
+ snap.forEach(d=>{
+  let a=d.data();
 
-    cars.innerHTML+=`
-    <div class="card">
-      <img src="${a.img}">
-      <div class="card-body">
-        <h3>${a.nombre}</h3>
-        <p>${a.precio}</p>
-        <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">
-          Contactar
-        </a>
-      </div>
-    </div>`;
-  });
+  cars.innerHTML+=`
+  <div class="card">
+    <img src="${a.img}">
+    <div class="card-body">
+      <h3>${a.nombre}</h3>
+      <p>${a.precio}</p>
+      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">Contactar</a>
+    </div>
+  </div>`;
+ });
 });
 </script>
 
