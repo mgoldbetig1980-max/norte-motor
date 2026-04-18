@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,34 +6,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { font-family: 'Segoe UI'; margin:0; background:#eef2f7; }
+body { margin:0; font-family:'Segoe UI'; background:#eef2f7; }
 
-header {
-  background: linear-gradient(90deg,#0A1F44,#1e3a8a);
-  color:white; padding:20px; text-align:center; font-size:22px;
+/* NAV */
+nav {
+  background:#0A1F44;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  padding:15px 20px;
 }
 
+nav span { margin:10px; cursor:pointer; }
+
+/* HERO */
+.hero {
+  background:linear-gradient(90deg,#0A1F44,#1e3a8a);
+  color:white;
+  text-align:center;
+  padding:60px 20px;
+}
+
+.hero h1 { font-size:40px; }
+
+/* SECCIONES */
 .container {
-  background:white; margin:20px auto; padding:20px;
-  border-radius:12px; width:90%; max-width:500px;
-  text-align:center; box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  background:white;
+  margin:20px auto;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:500px;
+  text-align:center;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
 input,select {
-  padding:12px; margin:8px; width:90%;
-  border-radius:8px; border:1px solid #ddd;
+  padding:12px;
+  margin:8px;
+  width:90%;
+  border-radius:8px;
+  border:1px solid #ddd;
 }
 
 button {
-  padding:12px 20px; margin:8px;
-  background:#F97316; color:white;
-  border:none; border-radius:8px;
+  padding:12px 20px;
+  margin:8px;
+  background:#F97316;
+  color:white;
+  border:none;
+  border-radius:8px;
 }
 
 .cars {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px; padding:20px;
+  gap:20px;
+  padding:20px;
 }
 
 .card {
@@ -58,14 +86,30 @@ button {
   padding:10px;
   border-radius:8px;
   text-decoration:none;
-  display:inline-block;
 }
 </style>
 </head>
 
 <body>
 
-<header>NORTE MOTOR 🚗</header>
+<nav>
+  <strong>Norte Motor</strong>
+  <div>
+    <span onclick="window.scrollTo(0,0)">Inicio</span>
+    <span onclick="window.scrollTo(0,800)">Publicar</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Comprá y vendé vehículos fácil</h1>
+  <p>Autos, motos, camionetas y embarcaciones</p>
+  <button onclick="window.scrollTo(0,900)">Ver vehículos</button>
+</div>
+
+<div class="container">
+  <h3>Categorías</h3>
+  <div>🚗 Autos | 🚙 Camionetas | 🏍️ Motos | 🚤 Embarcaciones</div>
+</div>
 
 <div class="container">
   <input id="busqueda" placeholder="Buscar..." onkeyup="filtrarAutos()">
@@ -87,7 +131,7 @@ button {
 </div>
 
 <div class="container">
-  <h3>Publicar</h3>
+  <h3>Publicar vehículo</h3>
   <input id="nombre" placeholder="Nombre"><br>
   <input id="precio" placeholder="Precio"><br>
   <input type="file" id="file"><br>
@@ -130,94 +174,83 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-let listaAutos = [];
+let listaAutos=[];
 
-window.registrar = async () => {
-  await createUserWithEmailAndPassword(auth,email.value,pass.value);
+window.registrar=()=>createUserWithEmailAndPassword(auth,email.value,pass.value);
+window.login=()=>signInWithEmailAndPassword(auth,email.value,pass.value);
+
+window.publicar=async()=>{
+ if(!auth.currentUser) return alert("Login primero");
+
+ let archivo=file.files[0];
+ let refImg=ref(storage,"autos/"+Date.now()+archivo.name);
+ await uploadBytes(refImg,archivo);
+ let url=await getDownloadURL(refImg);
+
+ await addDoc(collection(db,"autos"),{
+  nombre:nombre.value,
+  precio:precio.value,
+  img:url,
+  telefono:telefono.value,
+  categoria:categoriaInput.value,
+  user:auth.currentUser.email
+ });
 };
 
-window.login = async () => {
-  await signInWithEmailAndPassword(auth,email.value,pass.value);
-};
-
-window.publicar = async () => {
-  if (!auth.currentUser) return alert("Login primero");
-
-  const archivo = file.files[0];
-  if (!archivo) return alert("Elegí imagen");
-
-  const storageRef = ref(storage,"autos/"+Date.now()+archivo.name);
-  await uploadBytes(storageRef,archivo);
-  const url = await getDownloadURL(storageRef);
-
-  await addDoc(collection(db,"autos"),{
-    nombre:nombre.value,
-    precio:precio.value,
-    img:url,
-    telefono:telefono.value,
-    categoria:categoriaInput.value,
-    user:auth.currentUser.email
-  });
-};
-
-window.eliminarAuto = async(id)=>{
-  await deleteDoc(doc(db,"autos",id));
-};
+window.eliminarAuto=id=>deleteDoc(doc(db,"autos",id));
 
 onSnapshot(collection(db,"autos"),snap=>{
-  listaAutos=[];
-  snap.forEach(d=>{
-    let a=d.data();
-    a.id=d.id;
-    listaAutos.push(a);
-  });
-  mostrarAutos(listaAutos);
+ listaAutos=[];
+ snap.forEach(d=>{
+  let a=d.data();
+  a.id=d.id;
+  listaAutos.push(a);
+ });
+ mostrarAutos(listaAutos);
 });
 
 function filtrarAutos(){
-  let texto=busqueda.value.toLowerCase();
-  let cat=categoria.value;
-
-  let filtrados=listaAutos.filter(a=>
-    a.nombre.toLowerCase().includes(texto) &&
-    (cat==="todos"||a.categoria===cat)
-  );
-
-  mostrarAutos(filtrados);
+ let t=busqueda.value.toLowerCase();
+ let c=categoria.value;
+ mostrarAutos(listaAutos.filter(a=>
+  a.nombre.toLowerCase().includes(t) &&
+  (c==="todos"||a.categoria===c)
+ ));
 }
 
 function mostrarAutos(lista){
-  cars.innerHTML="";
-  misAutos.innerHTML="";
-  let user=auth.currentUser;
+ cars.innerHTML="";
+ misAutos.innerHTML="";
+ let user=auth.currentUser;
 
-  lista.forEach(a=>{
-    cars.innerHTML+=`
-      <div class="card">
-        <img src="${a.img}">
-        <div class="card-body">
-          <h3>${a.nombre}</h3>
-          <p>${a.precio}</p>
-          <p>📌 ${a.categoria}</p>
-          <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">WhatsApp</a>
-        </div>
+ lista.forEach(a=>{
+  cars.innerHTML+=`
+  <div class="card">
+    <img src="${a.img}">
+    <div class="card-body">
+      <h3>${a.nombre}</h3>
+      <p>${a.precio}</p>
+      <p>📌 ${a.categoria}</p>
+      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">WhatsApp</a>
+    </div>
+  </div>`;
+
+  if(user && user.email===a.user){
+    misAutos.innerHTML+=`
+    <div class="card">
+      <img src="${a.img}">
+      <div class="card-body">
+        <h3>${a.nombre}</h3>
+        <button onclick="eliminarAuto('${a.id}')">Eliminar</button>
       </div>
-    `;
-
-    if(user && user.email===a.user){
-      misAutos.innerHTML+=`
-        <div class="card">
-          <img src="${a.img}">
-          <div class="card-body">
-            <h3>${a.nombre}</h3>
-            <button onclick="eliminarAuto('${a.id}')">Eliminar</button>
-          </div>
-        </div>
-      `;
-    }
-  });
+    </div>`;
+  }
+ });
 }
 </script>
 
 </body>
 </html>
+
+ 
+
