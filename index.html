@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,11 +9,11 @@
 body {
   margin:0;
   font-family: Arial;
-  background:#111;
+  background:#0f172a;
   color:white;
 }
 
-/* TOP BAR */
+/* TOP */
 .topbar {
   background:#f97316;
   padding:15px;
@@ -23,14 +24,10 @@ body {
 
 /* MENU */
 .menu {
-  background:#1f1f1f;
+  background:#1e293b;
   display:flex;
   padding:10px;
   gap:20px;
-}
-
-.menu div {
-  cursor:pointer;
 }
 
 /* LAYOUT */
@@ -40,18 +37,25 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width:250px;
-  background:#222;
+  width:260px;
+  background:#020617;
   padding:20px;
+}
+
+.sidebar input, .sidebar select {
+  width:100%;
+  padding:10px;
+  margin:5px 0;
 }
 
 .sidebar button {
   width:100%;
   padding:10px;
-  margin:10px 0;
+  margin:5px 0;
   background:#f97316;
-  color:white;
   border:none;
+  color:white;
+  cursor:pointer;
 }
 
 /* CONTENT */
@@ -69,7 +73,7 @@ body {
 
 /* CARD */
 .card {
-  background:#1f1f1f;
+  background:#1e293b;
   border-radius:10px;
   overflow:hidden;
 }
@@ -84,12 +88,14 @@ body {
   padding:10px;
 }
 
+/* BOTON */
 .btn {
   background:#25D366;
   padding:8px;
   display:inline-block;
   color:white;
   text-decoration:none;
+  border-radius:5px;
 }
 </style>
 </head>
@@ -109,19 +115,21 @@ body {
 
 <div class="sidebar">
   <h3>Usuario</h3>
-  <input id="email" placeholder="Email"><br>
-  <input id="pass" type="password"><br>
+  <input id="email" placeholder="Email">
+  <input id="pass" type="password" placeholder="Contraseña">
 
-  <button onclick="login()">Login</button>
+  <button onclick="login()">Ingresar</button>
   <button onclick="registrar()">Registrarse</button>
+
+  <button onclick="recuperar()">🔑 Olvidé mi contraseña</button>
 
   <hr>
 
   <h3>Publicar</h3>
-  <input id="nombre" placeholder="Nombre"><br>
-  <input id="precio" placeholder="Precio"><br>
-  <input type="file" id="file"><br>
-  <input id="telefono" placeholder="Teléfono"><br>
+  <input id="nombre" placeholder="Nombre">
+  <input id="precio" placeholder="Precio">
+  <input type="file" id="file">
+  <input id="telefono" placeholder="Teléfono">
 
   <select id="categoriaInput">
     <option value="auto">Auto</option>
@@ -134,7 +142,7 @@ body {
 </div>
 
 <div class="content">
-  <h2>Vehículos</h2>
+  <h2>Vehículos disponibles</h2>
   <div class="cars" id="cars"></div>
 </div>
 
@@ -142,7 +150,7 @@ body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -160,11 +168,32 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-window.login = () => signInWithEmailAndPassword(auth,email.value,pass.value);
-window.registrar = () => createUserWithEmailAndPassword(auth,email.value,pass.value);
+// LOGIN
+window.login = () => {
+  signInWithEmailAndPassword(auth,email.value,pass.value)
+  .then(()=>alert("Bienvenido"))
+  .catch(e=>alert(e.message));
+};
 
+// REGISTRO
+window.registrar = () => {
+  createUserWithEmailAndPassword(auth,email.value,pass.value)
+  .then(()=>alert("Cuenta creada"))
+  .catch(e=>alert(e.message));
+};
+
+// 🔑 RECUPERAR CONTRASEÑA
+window.recuperar = () => {
+  if (!email.value) return alert("Ingresá tu email");
+
+  sendPasswordResetEmail(auth,email.value)
+  .then(()=>alert("Te enviamos un mail para recuperar la contraseña"))
+  .catch(e=>alert(e.message));
+};
+
+// PUBLICAR
 window.publicar = async () => {
-  if (!auth.currentUser) return alert("Login primero");
+  if (!auth.currentUser) return alert("Primero iniciá sesión");
 
   const archivo = file.files[0];
   const refImg = ref(storage,"autos/"+Date.now()+archivo.name);
@@ -179,10 +208,14 @@ window.publicar = async () => {
     telefono:telefono.value,
     categoria:categoriaInput.value
   });
+
+  alert("Publicado");
 };
 
+// MOSTRAR AUTOS
 onSnapshot(collection(db,"autos"),snap=>{
   cars.innerHTML="";
+
   snap.forEach(d=>{
     let a=d.data();
 
@@ -192,7 +225,9 @@ onSnapshot(collection(db,"autos"),snap=>{
       <div class="card-body">
         <h3>${a.nombre}</h3>
         <p>${a.precio}</p>
-        <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">WhatsApp</a>
+        <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">
+          WhatsApp
+        </a>
       </div>
     </div>`;
   });
