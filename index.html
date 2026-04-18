@@ -6,73 +6,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  font-family: Arial;
-  margin: 0;
-  background: #f4f6f9;
-}
+body { font-family: Arial; margin:0; background:#f4f6f9; }
 
 header {
-  background: #0A1F44;
-  color: white;
-  padding: 20px;
-  text-align: center;
+  background:#0A1F44;
+  color:white;
+  text-align:center;
+  padding:20px;
 }
 
 .container {
-  text-align: center;
-  padding: 20px;
+  text-align:center;
+  padding:20px;
 }
 
 input {
-  padding: 10px;
-  margin: 5px;
-  width: 250px;
+  padding:10px;
+  margin:5px;
+  width:250px;
 }
 
 button {
-  padding: 10px 20px;
-  margin: 5px;
-  background: #F97316;
-  color: white;
-  border: none;
-  cursor: pointer;
+  padding:10px 20px;
+  margin:5px;
+  background:#F97316;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 
 .cars {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 20px;
-  padding: 20px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  padding:20px;
 }
 
 .card {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
 }
 
-.card img {
-  width: 100%;
-}
+.card img { width:100%; }
 
-.card-body {
-  padding: 15px;
-}
+.card-body { padding:15px; }
 
 .btn {
-  background: #25D366;
-  color: white;
-  padding: 10px;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 10px;
+  background:#25D366;
+  color:white;
+  padding:10px;
+  text-decoration:none;
+  display:inline-block;
+  margin-top:10px;
 }
 
 @media(max-width:768px){
-  .cars {
-    grid-template-columns: 1fr;
-  }
+  .cars { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -95,36 +85,36 @@ button {
 <hr>
 
 <div class="container">
-  <h3>Mis autos</h3>
-  <div id="misAutos"></div>
-</div>
   <h3>Publicar vehículo</h3>
 
-  <input id="nombre" placeholder="Nombre del vehículo"><br>
+  <input id="nombre" placeholder="Nombre"><br>
   <input id="precio" placeholder="Precio"><br>
-  <input id="img" placeholder="URL de imagen"><br>
-  <input id="telefono" placeholder="Teléfono (ej: 549341XXXXXXX)"><br>
+  <input id="img" placeholder="URL imagen"><br>
+  <input id="telefono" placeholder="Teléfono (549...)"><br>
 
   <button onclick="publicar()">Publicar</button>
 </div>
 
+<div class="container">
+  <h3>Mis autos</h3>
+  <div id="misAutos"></div>
+</div>
+
 <section class="cars" id="cars"></section>
 
-<!-- FIREBASE MODERNO -->
 <script type="module">
-import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// 🔴 PEGAR TU CONFIG REAL ACA
 const firebaseConfig = {
-  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+  apiKey: "TU_API_KEY",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
-  storageBucket: "norte-motor.firebasestorage.app",
+  storageBucket: "norte-motor.appspot.com",
   messagingSenderId: "192628890922",
-  appId: "1:192628890922:web:48bc1972f62216c3535253",
-  measurementId: "G-BX1FCDC3P0"
+  appId: "1:192628890922:web:48bc1972f62216c3535253"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -157,6 +147,24 @@ window.publicar = async function() {
     alert("Tenés que iniciar sesión");
     return;
   }
+
+  await addDoc(collection(db, "autos"), {
+    nombre: nombre.value,
+    precio: precio.value,
+    img: img.value,
+    telefono: telefono.value,
+    user: auth.currentUser.email
+  });
+
+  alert("Auto publicado");
+}
+
+// ELIMINAR
+window.eliminarAuto = async function(id) {
+  await deleteDoc(doc(db, "autos", id));
+}
+
+// MOSTRAR AUTOS
 onSnapshot(collection(db, "autos"), (snapshot) => {
   cars.innerHTML = "";
   misAutos.innerHTML = "";
@@ -167,7 +175,7 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
     const auto = d.data();
     const id = d.id;
 
-    // TODOS LOS AUTOS
+    // TODOS
     cars.innerHTML += `
       <div class="card">
         <img src="${auto.img}">
@@ -189,7 +197,6 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
           <div class="card-body">
             <h3>${auto.nombre}</h3>
             <p>${auto.precio}</p>
-            <p>Publicado por vos</p>
 
             <button onclick="eliminarAuto('${id}')">
               Eliminar
@@ -200,49 +207,7 @@ onSnapshot(collection(db, "autos"), (snapshot) => {
     }
   });
 });
-  alert("Auto publicado");
-}
+</script>
 
-// MOSTRAR AUTOS
-onSnapshot(collection(db, "autos"), (snapshot) => {
-  cars.innerHTML = "";
-  misAutos.innerHTML = "";
-
-  const user = auth.currentUser;
-
-  snapshot.forEach(doc => {
-    const auto = doc.data();
-
-    // TODOS LOS AUTOS (público)
-    cars.innerHTML += `
-      <div class="card">
-        <img src="${auto.img}">
-        <div class="card-body">
-          <h3>${auto.nombre}</h3>
-          <p>${auto.precio}</p>
-          <a class="btn" href="https://wa.me/${auto.telefono}" target="_blank">
-            WhatsApp
-          </a>
-        </div>
-      </div>
-    `;
-
-    // SOLO MIS AUTOS
-   if (user && auto.user === user.email) {
-  misAutos.innerHTML += `
-    <div class="card">
-      <img src="${auto.img}">
-      <div class="card-body">
-        <h3>${auto.nombre}</h3>
-        <p>${auto.precio}</p>
-        <p>Publicado por vos</p>
-
-        <button onclick="eliminarAuto('${doc.id}')">
-          Eliminar
-        </button>
-      </div>
-    </div>
-  `;
-}
 </body>
 </html>
