@@ -156,6 +156,10 @@ window.publicar = async function() {
   if (!auth.currentUser) {
     alert("Tenés que iniciar sesión");
     return;
+window.eliminarAuto = async function(id) {
+  await deleteDoc(doc(db, "autos", id));
+  alert("Auto eliminado");
+}
   }
 
   await addDoc(collection(db, "autos"), {
