@@ -7,82 +7,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  font-family: 'Segoe UI', Arial;
-  margin: 0;
-  background: #eef2f7;
-}
+body { font-family: 'Segoe UI'; margin:0; background:#eef2f7; }
 
 header {
-  background: linear-gradient(90deg, #0A1F44, #1e3a8a);
-  color: white;
-  padding: 20px;
-  text-align: center;
-  font-size: 22px;
+  background: linear-gradient(90deg,#0A1F44,#1e3a8a);
+  color:white; padding:20px; text-align:center; font-size:22px;
 }
 
 .container {
-  background: white;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  text-align: center;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  background:white; margin:20px auto; padding:20px;
+  border-radius:12px; width:90%; max-width:500px;
+  text-align:center; box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-input, select {
-  padding: 12px;
-  margin: 8px;
-  width: 90%;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+input,select {
+  padding:12px; margin:8px; width:90%;
+  border-radius:8px; border:1px solid #ddd;
 }
 
 button {
-  padding: 12px 20px;
-  margin: 8px;
-  background: #F97316;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  padding:12px 20px; margin:8px;
+  background:#F97316; color:white;
+  border:none; border-radius:8px;
 }
 
 .cars {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap: 20px;
-  padding: 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px; padding:20px;
 }
 
 .card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  background:white;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
 .card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+  width:100%;
+  height:180px;
+  object-fit:cover;
 }
 
-.card-body {
-  padding: 15px;
-}
+.card-body { padding:15px; }
 
 .btn {
-  background: #25D366;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  text-decoration: none;
-  display: inline-block;
+  background:#25D366;
+  color:white;
+  padding:10px;
+  border-radius:8px;
+  text-decoration:none;
+  display:inline-block;
 }
-
 </style>
 </head>
 
@@ -103,7 +80,7 @@ button {
 
 <div class="container">
   <h3>Login</h3>
-  <input id="email" placeholder="Email"><br>
+  <input id="email"><br>
   <input id="pass" type="password"><br>
   <button onclick="registrar()">Registrarse</button>
   <button onclick="login()">Login</button>
@@ -113,7 +90,7 @@ button {
   <h3>Publicar</h3>
   <input id="nombre" placeholder="Nombre"><br>
   <input id="precio" placeholder="Precio"><br>
-  <input id="img" placeholder="URL imagen"><br>
+  <input type="file" id="file"><br>
   <input id="telefono" placeholder="Teléfono"><br>
 
   <select id="categoriaInput">
@@ -137,6 +114,7 @@ button {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
@@ -147,55 +125,62 @@ const firebaseConfig = {
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 let listaAutos = [];
 
 window.registrar = async () => {
-  await createUserWithEmailAndPassword(auth, email.value, pass.value);
+  await createUserWithEmailAndPassword(auth,email.value,pass.value);
 };
 
 window.login = async () => {
-  await signInWithEmailAndPassword(auth, email.value, pass.value);
+  await signInWithEmailAndPassword(auth,email.value,pass.value);
 };
 
 window.publicar = async () => {
   if (!auth.currentUser) return alert("Login primero");
 
-  await addDoc(collection(db,"autos"), {
-    nombre: nombre.value,
-    precio: precio.value,
-    img: img.value,
-    telefono: telefono.value,
-    categoria: categoriaInput.value,
-    user: auth.currentUser.email
+  const archivo = file.files[0];
+  if (!archivo) return alert("Elegí imagen");
+
+  const storageRef = ref(storage,"autos/"+Date.now()+archivo.name);
+  await uploadBytes(storageRef,archivo);
+  const url = await getDownloadURL(storageRef);
+
+  await addDoc(collection(db,"autos"),{
+    nombre:nombre.value,
+    precio:precio.value,
+    img:url,
+    telefono:telefono.value,
+    categoria:categoriaInput.value,
+    user:auth.currentUser.email
   });
 };
 
-window.eliminarAuto = async (id) => {
+window.eliminarAuto = async(id)=>{
   await deleteDoc(doc(db,"autos",id));
 };
 
-onSnapshot(collection(db,"autos"), snap => {
-  listaAutos = [];
-  snap.forEach(d => {
-    let a = d.data();
-    a.id = d.id;
+onSnapshot(collection(db,"autos"),snap=>{
+  listaAutos=[];
+  snap.forEach(d=>{
+    let a=d.data();
+    a.id=d.id;
     listaAutos.push(a);
   });
   mostrarAutos(listaAutos);
 });
 
 function filtrarAutos(){
-  let texto = busqueda.value.toLowerCase();
-  let cat = categoria.value;
+  let texto=busqueda.value.toLowerCase();
+  let cat=categoria.value;
 
-  let filtrados = listaAutos.filter(a =>
+  let filtrados=listaAutos.filter(a=>
     a.nombre.toLowerCase().includes(texto) &&
-    (cat==="todos" || a.categoria===cat)
+    (cat==="todos"||a.categoria===cat)
   );
 
   mostrarAutos(filtrados);
@@ -204,7 +189,7 @@ function filtrarAutos(){
 function mostrarAutos(lista){
   cars.innerHTML="";
   misAutos.innerHTML="";
-  let user = auth.currentUser;
+  let user=auth.currentUser;
 
   lista.forEach(a=>{
     cars.innerHTML+=`
@@ -236,15 +221,3 @@ function mostrarAutos(lista){
 
 </body>
 </html>
-
- 
-  
-
-
-
-
-
-
- 
-
- 
