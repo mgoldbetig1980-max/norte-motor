@@ -156,20 +156,50 @@ window.publicar = async function() {
   if (!auth.currentUser) {
     alert("Tenés que iniciar sesión");
     return;
-window.eliminarAuto = async function(id) {
-  await deleteDoc(doc(db, "autos", id));
-  alert("Auto eliminado");
-}
   }
+onSnapshot(collection(db, "autos"), (snapshot) => {
+  cars.innerHTML = "";
+  misAutos.innerHTML = "";
 
-  await addDoc(collection(db, "autos"), {
-    nombre: nombre.value,
-    precio: precio.value,
-    img: img.value,
-    telefono: telefono.value,
-    user: auth.currentUser.email
+  const user = auth.currentUser;
+
+  snapshot.forEach(d => {
+    const auto = d.data();
+    const id = d.id;
+
+    // TODOS LOS AUTOS
+    cars.innerHTML += `
+      <div class="card">
+        <img src="${auto.img}">
+        <div class="card-body">
+          <h3>${auto.nombre}</h3>
+          <p>${auto.precio}</p>
+          <a class="btn" href="https://wa.me/${auto.telefono}" target="_blank">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+
+    // MIS AUTOS
+    if (user && auto.user === user.email) {
+      misAutos.innerHTML += `
+        <div class="card">
+          <img src="${auto.img}">
+          <div class="card-body">
+            <h3>${auto.nombre}</h3>
+            <p>${auto.precio}</p>
+            <p>Publicado por vos</p>
+
+            <button onclick="eliminarAuto('${id}')">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      `;
+    }
   });
-
+});
   alert("Auto publicado");
 }
 
