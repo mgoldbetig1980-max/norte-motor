@@ -119,21 +119,26 @@ body {
 
   <!-- SOLO LOGUEADO -->
   <div id="panelPublicar" class="hidden">
-    <h3>Publicar</h3>
-    <input id="nombre" placeholder="Nombre">
-    <input id="precio" placeholder="Precio">
-    <input type="file" id="file">
-    <input id="telefono" placeholder="Teléfono">
+  <h3>Publicar</h3>
 
-    <select id="categoriaInput">
-      <option value="auto">Auto</option>
-      <option value="camioneta">Camioneta</option>
-      <option value="moto">Moto</option>
-      <option value="embarcacion">Embarcación</option>
-    </select>
+  <input id="nombre" placeholder="Nombre">
+  <input id="precio" placeholder="Precio">
+  <input type="file" id="file">
+  <input id="telefono" placeholder="Teléfono">
 
-    <button onclick="publicar()">Publicar</button>
-  </div>
+  <select id="categoriaInput">
+    <option value="auto">Auto</option>
+    <option value="camioneta">Camioneta</option>
+    <option value="moto">Moto</option>
+    <option value="embarcacion">Embarcación</option>
+  </select>
+
+  <button onclick="publicar()">Publicar</button>
+</div>
+
+<div id="mensajeLogin">
+  🔒 Iniciá sesión para publicar
+</div>
 
   <!-- MENSAJE SI NO ESTÁ LOGUEADO -->
   <div id="mensajeLogin">
