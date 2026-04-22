@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <title>Norte Motor</title>
 
-<!-- GOOGLE FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 body{
   margin:0;
   font-family:'Poppins', sans-serif;
@@ -17,7 +17,6 @@ body{
 /* HEADER */
 header{
   background:#1e3a8a;
-  color:white;
   padding:15px 40px;
   display:flex;
   justify-content:space-between;
@@ -25,10 +24,10 @@ header{
 }
 
 .logo{
-  font-size:22px;
+  font-size:24px;
   font-weight:700;
+  color:white;
 }
-
 .logo span{
   color:#ff6a00;
 }
@@ -37,64 +36,91 @@ nav a{
   color:white;
   margin:0 15px;
   text-decoration:none;
-  font-weight:500;
 }
 
 .btn{
   background:#ff6a00;
+  color:white;
   border:none;
   padding:10px 15px;
-  color:white;
   border-radius:6px;
   cursor:pointer;
-  font-weight:600;
 }
 
 /* HERO */
 .hero{
-  background:url('https://images.unsplash.com/photo-1549921296-3c0b3b36c8e1?q=80&w=1920') center/cover;
-  height:500px;
+  position:relative;
+  height:520px;
   display:flex;
   align-items:center;
   padding:60px;
   color:white;
+  background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920');
+  background-size:cover;
+  background-position:center;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+}
+
+.hero > div{
+  position:relative;
+  z-index:2;
 }
 
 .hero h1{
-  font-size:42px;
+  font-size:48px;
+  margin-bottom:10px;
+}
+.hero h2{
+  font-weight:400;
+  margin-bottom:20px;
 }
 
+/* BUSCADOR */
 .search-box{
-  margin-top:20px;
+  display:flex;
+  gap:10px;
   background:white;
   padding:15px;
   border-radius:10px;
-  display:flex;
-  gap:10px;
 }
-
 .search-box input{
-  padding:10px;
   border:none;
-  outline:none;
+  padding:10px;
   width:150px;
 }
 
-/* CATEGORIAS */
+/* CATEGORIAS PRO */
 .categorias{
   display:flex;
   justify-content:center;
   gap:20px;
-  margin-top:-40px;
+  margin-top:-50px;
 }
 
 .cat{
   background:white;
-  padding:20px;
-  border-radius:12px;
-  width:180px;
+  width:200px;
+  padding:25px;
+  border-radius:14px;
   text-align:center;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  box-shadow:0 5px 15px rgba(0,0,0,0.15);
+  transition:0.3s;
+}
+
+.cat:hover{
+  transform:translateY(-5px);
+}
+
+.cat img{
+  width:60px;
+  margin-bottom:10px;
 }
 
 /* CARDS */
@@ -126,6 +152,7 @@ nav a{
   font-weight:700;
 }
 
+/* FOOTER */
 .footer{
   background:#1e3a8a;
   color:white;
@@ -133,11 +160,9 @@ nav a{
   text-align:center;
 }
 
-/* LOGIN MODAL */
+/* MODAL LOGIN */
 .modal{
   position:fixed;
-  top:0;
-  left:0;
   width:100%;
   height:100%;
   background:rgba(0,0,0,0.6);
@@ -177,7 +202,6 @@ nav a{
 
   <div>
     <button class="btn" onclick="abrirLogin()">Ingresar</button>
-    <button class="btn" onclick="irPublicar()">Publicar</button>
   </div>
 </header>
 
@@ -196,11 +220,29 @@ nav a{
   </div>
 </section>
 
+<!-- CATEGORIAS CON ICONOS REALES -->
 <div class="categorias">
-  <div class="cat">🚗 Autos</div>
-  <div class="cat">🚙 Camionetas</div>
-  <div class="cat">🏍️ Motos</div>
-  <div class="cat">🚤 Embarcaciones</div>
+
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/743/743922.png">
+    <h3>Autos</h3>
+  </div>
+
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/741/741407.png">
+    <h3>Camionetas</h3>
+  </div>
+
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
+    <h3>Motos</h3>
+  </div>
+
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
+    <h3>Embarcaciones</h3>
+  </div>
+
 </div>
 
 <h2 style="padding:40px;">Vehículos Destacados</h2>
@@ -208,7 +250,7 @@ nav a{
 <div id="autos" class="grid"></div>
 
 <div class="footer">
-  © Norte Motor - Plataforma de compra y venta
+  © Norte Motor
 </div>
 
 <!-- LOGIN -->
@@ -223,12 +265,11 @@ nav a{
   </div>
 </div>
 
-<!-- FIREBASE -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
@@ -239,46 +280,28 @@ const firebaseConfig = {
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* LOGIN */
+window.abrirLogin = ()=> modal.style.display="flex";
+
 window.login = async ()=>{
-  try{
-    await signInWithEmailAndPassword(auth,email.value,pass.value);
-    alert("Bienvenido");
-    modal.style.display="none";
-  }catch(e){ alert(e.message); }
+  await signInWithEmailAndPassword(auth,email.value,pass.value);
+  alert("Bienvenido");
 }
 
-/* REGISTRO */
 window.registro = async ()=>{
-  try{
-    await createUserWithEmailAndPassword(auth,email.value,pass.value);
-    alert("Registrado");
-  }catch(e){ alert(e.message); }
+  await createUserWithEmailAndPassword(auth,email.value,pass.value);
+  alert("Registrado");
 }
 
-/* RECUPERAR */
 window.recuperar = async ()=>{
   await sendPasswordResetEmail(auth,email.value);
   alert("Revisá tu mail");
 }
 
-/* MODAL */
-window.abrirLogin = ()=> modal.style.display="flex";
-
-/* PUBLICAR */
-window.irPublicar = ()=>{
-  if(!auth.currentUser){
-    alert("Debes iniciar sesión");
-    return;
-  }
-  alert("Panel de publicación (siguiente paso)");
-}
-
-/* MOSTRAR AUTOS */
 async function cargarAutos(){
   const querySnapshot = await getDocs(collection(db,"autos"));
   autos.innerHTML="";
