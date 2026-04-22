@@ -15,23 +15,30 @@ header {
   color:white;
   display:flex;
   justify-content:space-between;
-  padding:15px 20px;
+  align-items:center;
+  padding:15px;
 }
 
-header button {
-  background:#f97316;
+nav a {
   color:white;
+  margin:10px;
+  text-decoration:none;
+}
+
+.btn-naranja {
+  background:#f97316;
   border:none;
   padding:10px;
+  color:white;
   cursor:pointer;
 }
 
 /* HERO */
 .hero {
   background:url('https://images.unsplash.com/photo-1549921296-3a6bfe57a0a9') center/cover;
-  padding:100px 20px;
   color:white;
   text-align:center;
+  padding:100px 20px;
 }
 
 /* CATEGORIAS */
@@ -41,21 +48,23 @@ header button {
   padding:20px;
 }
 
-.cat {
+.categorias div {
   background:white;
   padding:20px;
   border-radius:10px;
 }
 
-/* CARDS */
+/* SECTIONS */
 .section { padding:20px; }
 
-.cars {
+/* GRID */
+.grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:20px;
 }
 
+/* CARD */
 .card {
   background:white;
   border-radius:10px;
@@ -64,11 +73,13 @@ header button {
 
 .card img {
   width:100%;
-  height:150px;
+  height:160px;
   object-fit:cover;
 }
 
-.card-body { padding:10px; }
+.card-body {
+  padding:10px;
+}
 
 .btn {
   background:#f97316;
@@ -79,13 +90,20 @@ header button {
   text-decoration:none;
 }
 
+/* FOOTER */
+footer {
+  background:#1e3a8a;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
 /* MODAL */
 .modal {
   position:fixed;
   top:0; left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.7);
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
   align-items:center;
@@ -98,42 +116,50 @@ header button {
   width:300px;
 }
 
-input,select {
+input, select {
   width:100%;
   padding:10px;
   margin:5px 0;
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
-  <strong>NORTE MOTOR</strong>
-  <div>
-    <button onclick="abrirLogin()">Ingresar</button>
-    <button onclick="abrirPublicar()">Publicar</button>
-  </div>
+  <strong>🚗 NORTE MOTOR</strong>
+  <nav>
+    <a href="#">Inicio</a>
+    <a href="#">Autos</a>
+    <a href="#">Camionetas</a>
+    <a href="#">Motos</a>
+    <a href="#">Embarcaciones</a>
+  </nav>
+  <button class="btn-naranja" onclick="abrirLogin()">Ingresar</button>
 </header>
 
-<div class="hero">
+<section class="hero">
   <h1>Encontrá tu próximo vehículo</h1>
-</div>
+  <p>NORTE MOTOR</p>
+</section>
 
-<div class="categorias">
-  <div class="cat">🚗 Autos</div>
-  <div class="cat">🚙 Camionetas</div>
-  <div class="cat">🏍️ Motos</div>
-  <div class="cat">🚤 Embarcaciones</div>
-</div>
+<section class="categorias">
+  <div>🚗 Autos</div>
+  <div>🚙 Camionetas</div>
+  <div>🏍️ Motos</div>
+  <div>🚤 Embarcaciones</div>
+</section>
 
-<div class="section">
+<section class="section">
   <h2>Últimos publicados</h2>
-  <div class="cars" id="cars"></div>
-</div>
+  <div id="cars" class="grid"></div>
+</section>
 
-<!-- LOGIN MODAL -->
+<footer>
+  © Norte Motor - Todos los derechos reservados
+</footer>
+
+<!-- LOGIN -->
 <div class="modal" id="loginModal">
   <div class="modal-content">
     <h3>Login</h3>
@@ -145,7 +171,7 @@ input,select {
   </div>
 </div>
 
-<!-- PUBLICAR MODAL -->
+<!-- PUBLICAR -->
 <div class="modal" id="publicarModal">
   <div class="modal-content">
     <h3>Publicar</h3>
@@ -172,9 +198,9 @@ import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstati
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey:  "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+  apiKey: "TU_API_KEY",
   authDomain: "norte-motor.firebaseapp.com",
-  projectId: "norte-motor",
+  projectId: "norte-motor"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -184,16 +210,13 @@ const storage = getStorage(app);
 
 window.abrirLogin = ()=> loginModal.style.display="flex";
 
-window.abrirPublicar = ()=>{
-  if(!auth.currentUser) return alert("Debes iniciar sesión");
-  publicarModal.style.display="flex";
-};
-
 window.login = ()=> signInWithEmailAndPassword(auth,email.value,pass.value);
 window.registrar = ()=> createUserWithEmailAndPassword(auth,email.value,pass.value);
 window.recuperar = ()=> sendPasswordResetEmail(auth,email.value);
 
 window.publicar = async ()=>{
+ if(!auth.currentUser) return alert("Debes iniciar sesión");
+
  const archivo=file.files[0];
  const refImg=ref(storage,"autos/"+Date.now()+archivo.name);
 
@@ -222,7 +245,9 @@ onSnapshot(collection(db,"autos"),snap=>{
     <div class="card-body">
       <h3>${a.nombre}</h3>
       <p>${a.precio}</p>
-      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">Contactar</a>
+      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">
+        Contactar
+      </a>
     </div>
   </div>`;
  });
@@ -231,5 +256,3 @@ onSnapshot(collection(db,"autos"),snap=>{
 
 </body>
 </html>
-
- 
