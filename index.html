@@ -8,11 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-body{
-  margin:0;
-  font-family:'Poppins';
-  background:#eef2f7;
-}
+body{margin:0;font-family:'Poppins';background:#eef2f7}
 
 /* HEADER */
 header{
@@ -23,25 +19,18 @@ header{
   align-items:center;
 }
 
-.logo{
-  color:white;
-  font-size:28px;
-  font-weight:700;
-}
+.logo{color:white;font-size:28px;font-weight:700}
 .logo span{color:#ff6a00}
 
-/* HERO (SIN TEXTO DUPLICADO) */
-.hero{
-  height:250px;
-  background:#1e3a8a;
-}
+/* HERO */
+.hero{height:250px;background:#1e3a8a}
 
 /* CATEGORIAS */
 .categorias{
   display:flex;
   justify-content:center;
-  gap:25px;
-  margin:25px;
+  gap:20px;
+  margin:20px;
 }
 
 .cat{
@@ -49,27 +38,32 @@ header{
   padding:20px;
   border-radius:10px;
   text-align:center;
-  width:140px;
+  width:130px;
+  cursor:pointer;
 }
 
-.cat i{
-  font-size:30px;
-  color:#1e3a8a;
+.cat i{font-size:30px;color:#1e3a8a}
+
+/* BUSCADOR */
+#buscador{
+  display:none;
+  background:white;
+  padding:20px;
+  margin:20px;
+  border-radius:10px;
+}
+
+#buscador input,#buscador select{
+  padding:10px;
+  margin:5px;
 }
 
 /* LAYOUT */
-.main{
-  display:flex;
-  gap:20px;
-  padding:20px;
-}
+.main{display:flex;padding:20px;gap:20px}
 
-/* IZQUIERDA */
-.sidebar{
-  width:260px;
-}
+/* SIDEBAR */
+.sidebar{width:250px}
 
-/* BOTONES */
 .menu-btn{
   width:100%;
   padding:12px;
@@ -81,33 +75,21 @@ header{
   border-radius:6px;
 }
 
-/* FORMULARIOS */
 .form-box{
   display:none;
   background:white;
   padding:15px;
   border-radius:10px;
-  margin-top:10px;
 }
 
 .form-box input{
   width:100%;
   padding:10px;
-  margin:8px 0;
+  margin:5px 0;
 }
 
-.form-box button{
-  width:100%;
-  padding:10px;
-  background:#1e3a8a;
-  color:white;
-  border:none;
-}
-
-/* CONTENIDO */
-.content{
-  flex:1;
-}
+/* AUTOS */
+.content{flex:1}
 
 .grid{
   display:grid;
@@ -115,27 +97,10 @@ header{
   gap:20px;
 }
 
-.card{
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-}
-
-.card-body{
-  padding:10px;
-}
-
-.price{
-  color:#ff6a00;
-  font-weight:700;
-}
-
+.card{background:white;border-radius:10px;overflow:hidden}
+.card img{width:100%;height:180px;object-fit:cover}
+.card-body{padding:10px}
+.price{color:#ff6a00;font-weight:700}
 </style>
 </head>
 
@@ -149,45 +114,96 @@ header{
 
 <!-- CATEGORIAS -->
 <div class="categorias">
-  <div class="cat"><i class="fas fa-car"></i><p>Autos</p></div>
-  <div class="cat"><i class="fas fa-truck"></i><p>Camionetas</p></div>
-  <div class="cat"><i class="fas fa-motorcycle"></i><p>Motos</p></div>
-  <div class="cat"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
-  <div class="cat"><i class="fas fa-truck-moving"></i><p>Camiones</p></div>
+  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-car"></i><p>Autos</p></div>
+  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-truck"></i><p>Camionetas</p></div>
+  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-motorcycle"></i><p>Motos</p></div>
+  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
+  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-truck-moving"></i><p>Camiones</p></div>
+</div>
+
+<!-- BUSCADOR -->
+<div id="buscador">
+  <h3>Buscar vehículo</h3>
+
+  <select id="marca">
+    <option value="">Marca</option>
+
+    <!-- TRADICIONALES -->
+    <option>Toyota</option>
+    <option>Ford</option>
+    <option>Chevrolet</option>
+    <option>Volkswagen</option>
+    <option>Fiat</option>
+    <option>Renault</option>
+    <option>Peugeot</option>
+    <option>Honda</option>
+    <option>Nissan</option>
+    <option>BMW</option>
+    <option>Audi</option>
+    <option>Mercedes-Benz</option>
+    <option>Jeep</option>
+    <option>Kia</option>
+    <option>Hyundai</option>
+
+    <!-- CHINAS -->
+    <option>BYD</option>
+    <option>Chery</option>
+    <option>Geely</option>
+    <option>Great Wall</option>
+    <option>Haval</option>
+    <option>JAC</option>
+    <option>BAIC</option>
+    <option>Changan</option>
+    <option>Dongfeng</option>
+    <option>FAW</option>
+    <option>Foton</option>
+    <option>Jetour</option>
+    <option>Omoda</option>
+    <option>Exeed</option>
+    <option>Leapmotor</option>
+
+  </select>
+
+  <input id="anio" placeholder="Año">
+
+  <select id="condicion">
+    <option value="">Condición</option>
+    <option value="0km">0 KM</option>
+    <option value="usado">Usado</option>
+  </select>
+
+  <input id="km" placeholder="Kilómetros máximos">
+
+  <button onclick="filtrar()">Buscar</button>
 </div>
 
 <div class="main">
 
-  <!-- IZQUIERDA -->
+  <!-- SIDEBAR -->
   <div class="sidebar">
-
     <button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
     <button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
     <button class="menu-btn" onclick="mostrar('recuperar')">Recuperar contraseña</button>
 
-    <!-- LOGIN -->
     <div id="loginBox" class="form-box">
-      <input id="email" placeholder="Email">
-      <input id="pass" type="password" placeholder="Contraseña">
+      <input id="email">
+      <input id="pass" type="password">
       <button onclick="login()">Ingresar</button>
     </div>
 
-    <!-- REGISTRO -->
     <div id="registroBox" class="form-box">
-      <input id="email2" placeholder="Email">
+      <input id="email2">
       <input id="pass2" type="password">
       <button onclick="registro()">Crear cuenta</button>
     </div>
 
-    <!-- RECUPERAR -->
     <div id="recuperarBox" class="form-box">
-      <input id="email3" placeholder="Email">
+      <input id="email3">
       <button onclick="recuperar()">Enviar</button>
     </div>
-
   </div>
 
-  <!-- DERECHA -->
+  <!-- AUTOS -->
   <div class="content">
     <div id="autos" class="grid"></div>
   </div>
@@ -209,11 +225,12 @@ apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* MOSTRAR FORM */
+/* FORMULARIOS */
 window.mostrar = (tipo)=>{
   loginBox.style.display="none";
   registroBox.style.display="none";
@@ -254,7 +271,35 @@ window.recuperar = async ()=>{
   }
 };
 
-/* AUTOS */
+/* BUSCADOR */
+window.abrirBuscador = ()=>{
+  buscador.style.display="block";
+};
+
+window.filtrar = async ()=>{
+  const data = await getDocs(collection(db,"autos"));
+  autos.innerHTML="";
+
+  data.forEach(doc=>{
+    const a = doc.data();
+
+    if(marca.value && a.marca !== marca.value) return;
+    if(anio.value && a.anio != anio.value) return;
+    if(condicion.value && a.condicion !== condicion.value) return;
+    if(km.value && a.km > km.value) return;
+
+    autos.innerHTML+=`
+      <div class="card">
+        <img src="${a.imagen}">
+        <div class="card-body">
+          <h3>${a.nombre}</h3>
+          <div class="price">$${a.precio}</div>
+        </div>
+      </div>`;
+  });
+};
+
+/* CARGA INICIAL */
 async function cargarAutos(){
   const data = await getDocs(collection(db,"autos"));
   autos.innerHTML="";
@@ -276,4 +321,4 @@ cargarAutos();
 </script>
 
 </body>
-</html>
+</html>v
