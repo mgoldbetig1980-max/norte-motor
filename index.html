@@ -18,12 +18,11 @@ header{
   justify-content:center;
   align-items:center;
 }
-
 .logo{color:white;font-size:28px;font-weight:700}
 .logo span{color:#ff6a00}
 
 /* HERO */
-.hero{height:250px;background:#1e3a8a}
+.hero{height:200px;background:#1e3a8a}
 
 /* CATEGORIAS */
 .categorias{
@@ -32,19 +31,17 @@ header{
   gap:20px;
   margin:20px;
 }
-
 .cat{
   background:white;
   padding:20px;
   border-radius:10px;
+  width:120px;
   text-align:center;
-  width:130px;
   cursor:pointer;
 }
+.cat i{font-size:28px;color:#1e3a8a}
 
-.cat i{font-size:30px;color:#1e3a8a}
-
-/* BUSCADOR */
+/* FILTROS PRO */
 #buscador{
   display:none;
   background:white;
@@ -52,10 +49,13 @@ header{
   margin:20px;
   border-radius:10px;
 }
-
-#buscador input,#buscador select{
+.filtros{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.filtros input,.filtros select{
   padding:10px;
-  margin:5px;
 }
 
 /* LAYOUT */
@@ -63,7 +63,6 @@ header{
 
 /* SIDEBAR */
 .sidebar{width:250px}
-
 .menu-btn{
   width:100%;
   padding:12px;
@@ -71,32 +70,24 @@ header{
   background:#ff6a00;
   color:white;
   border:none;
-  cursor:pointer;
   border-radius:6px;
+  cursor:pointer;
 }
-
 .form-box{
   display:none;
   background:white;
   padding:15px;
   border-radius:10px;
 }
+.form-box input{width:100%;padding:10px;margin:5px 0}
 
-.form-box input{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
-
-/* AUTOS */
+/* GRID */
 .content{flex:1}
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:20px;
 }
-
 .card{background:white;border-radius:10px;overflow:hidden}
 .card img{width:100%;height:180px;object-fit:cover}
 .card-body{padding:10px}
@@ -121,60 +112,47 @@ header{
   <div class="cat" onclick="abrirBuscador()"><i class="fas fa-truck-moving"></i><p>Camiones</p></div>
 </div>
 
-<!-- BUSCADOR -->
+<!-- FILTROS -->
 <div id="buscador">
-  <h3>Buscar vehículo</h3>
+  <h3>Filtrar vehículos</h3>
 
-  <select id="marca">
-    <option value="">Marca</option>
+  <div class="filtros">
 
-    <!-- TRADICIONALES -->
-    <option>Toyota</option>
-    <option>Ford</option>
-    <option>Chevrolet</option>
-    <option>Volkswagen</option>
-    <option>Fiat</option>
-    <option>Renault</option>
-    <option>Peugeot</option>
-    <option>Honda</option>
-    <option>Nissan</option>
-    <option>BMW</option>
-    <option>Audi</option>
-    <option>Mercedes-Benz</option>
-    <option>Jeep</option>
-    <option>Kia</option>
-    <option>Hyundai</option>
+    <select id="marca">
+      <option value="">Marca</option>
+      <option>Toyota</option><option>Ford</option><option>Chevrolet</option>
+      <option>Volkswagen</option><option>Fiat</option><option>Renault</option>
+      <option>Peugeot</option><option>Honda</option><option>Nissan</option>
 
-    <!-- CHINAS -->
-    <option>BYD</option>
-    <option>Chery</option>
-    <option>Geely</option>
-    <option>Great Wall</option>
-    <option>Haval</option>
-    <option>JAC</option>
-    <option>BAIC</option>
-    <option>Changan</option>
-    <option>Dongfeng</option>
-    <option>FAW</option>
-    <option>Foton</option>
-    <option>Jetour</option>
-    <option>Omoda</option>
-    <option>Exeed</option>
-    <option>Leapmotor</option>
+      <!-- CHINAS -->
+      <option>BYD</option><option>Chery</option><option>Geely</option>
+      <option>Haval</option><option>Changan</option><option>JAC</option>
+    </select>
 
-  </select>
+    <input id="version" placeholder="Versión">
+    <select id="transmision">
+      <option value="">Transmisión</option>
+      <option>Manual</option>
+      <option>Automática</option>
+    </select>
 
-  <input id="anio" placeholder="Año">
+    <select id="combustible">
+      <option value="">Combustible</option>
+      <option>Nafta</option>
+      <option>Diésel</option>
+      <option>Híbrido</option>
+      <option>Eléctrico</option>
+    </select>
 
-  <select id="condicion">
-    <option value="">Condición</option>
-    <option value="0km">0 KM</option>
-    <option value="usado">Usado</option>
-  </select>
+    <input id="anio" placeholder="Año">
+    <input id="precioMin" placeholder="Precio desde">
+    <input id="precioMax" placeholder="Precio hasta">
+    <input id="kmMin" placeholder="KM desde">
+    <input id="kmMax" placeholder="KM hasta">
 
-  <input id="km" placeholder="Kilómetros máximos">
+    <button onclick="filtrar()">Buscar</button>
 
-  <button onclick="filtrar()">Buscar</button>
+  </div>
 </div>
 
 <div class="main">
@@ -183,7 +161,7 @@ header{
   <div class="sidebar">
     <button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
     <button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
-    <button class="menu-btn" onclick="mostrar('recuperar')">Recuperar contraseña</button>
+    <button class="menu-btn" onclick="mostrar('recuperar')">Recuperar</button>
 
     <div id="loginBox" class="form-box">
       <input id="email">
@@ -194,7 +172,7 @@ header{
     <div id="registroBox" class="form-box">
       <input id="email2">
       <input id="pass2" type="password">
-      <button onclick="registro()">Crear cuenta</button>
+      <button onclick="registro()">Crear</button>
     </div>
 
     <div id="recuperarBox" class="form-box">
@@ -217,7 +195,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, se
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
   storageBucket: "norte-motor.firebasestorage.app",
@@ -246,29 +224,21 @@ window.login = async ()=>{
   try{
     await signInWithEmailAndPassword(auth,email.value,pass.value);
     alert("Bienvenido");
-  }catch(e){
-    alert(e.message);
-  }
+  }catch(e){alert(e.message);}
 };
 
-/* REGISTRO */
 window.registro = async ()=>{
   try{
     await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
     alert("Cuenta creada");
-  }catch(e){
-    alert(e.message);
-  }
+  }catch(e){alert(e.message);}
 };
 
-/* RECUPERAR */
 window.recuperar = async ()=>{
   try{
     await sendPasswordResetEmail(auth,email3.value);
-    alert("Revisá tu mail");
-  }catch(e){
-    alert(e.message);
-  }
+    alert("Email enviado");
+  }catch(e){alert(e.message);}
 };
 
 /* BUSCADOR */
@@ -284,9 +254,15 @@ window.filtrar = async ()=>{
     const a = doc.data();
 
     if(marca.value && a.marca !== marca.value) return;
-    if(anio.value && a.anio != anio.value) return;
-    if(condicion.value && a.condicion !== condicion.value) return;
-    if(km.value && a.km > km.value) return;
+    if(version.value && !a.version?.includes(version.value)) return;
+    if(transmision.value && a.transmision !== transmision.value) return;
+    if(combustible.value && a.combustible !== combustible.value) return;
+
+    if(precioMin.value && a.precio < precioMin.value) return;
+    if(precioMax.value && a.precio > precioMax.value) return;
+
+    if(kmMin.value && a.km < kmMin.value) return;
+    if(kmMax.value && a.km > kmMax.value) return;
 
     autos.innerHTML+=`
       <div class="card">
@@ -321,4 +297,4 @@ cargarAutos();
 </script>
 
 </body>
-</html>v
+</html>
