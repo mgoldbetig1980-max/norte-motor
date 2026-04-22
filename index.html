@@ -3,54 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <title>Norte Motor PRO</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-body{
-  margin:0;
-  font-family:'Poppins', sans-serif;
-  background:#eef2f7;
-}
+body{margin:0;font-family:'Poppins';background:#eef2f7}
 
-/* HEADER MEJORADO */
+/* HEADER */
 header{
   background:#1e3a8a;
   height:90px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
+  justify-content:center;
+  position:relative;
 }
 
-/* CENTRAR LOGO */
+/* LOGO CENTRADO */
 .logo{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
+  color:white;
   font-size:26px;
   font-weight:700;
-  color:white;
 }
-.logo span{
-  color:#ff6a00;
-}
+.logo span{color:#ff6a00}
 
-/* BOTONES DERECHA */
-.header-right{
-  margin-left:auto;
+/* BOTON IZQUIERDA */
+.menu-left{
+  position:absolute;
+  left:20px;
 }
 
 .btn{
   background:#ff6a00;
   color:white;
   border:none;
-  padding:10px 15px;
+  padding:10px;
   border-radius:6px;
   cursor:pointer;
-  margin-left:10px;
+}
+
+/* PANEL LATERAL */
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-300px;
+  width:300px;
+  height:100%;
+  background:white;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+  padding:20px;
+  transition:0.3s;
+}
+
+.sidebar.active{
+  left:0;
+}
+
+.sidebar h3{
+  margin-top:0;
+}
+
+.sidebar input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+}
+
+.sidebar button{
+  width:100%;
+  margin:5px 0;
 }
 
 /* HERO */
@@ -103,43 +125,8 @@ header{
   object-fit:cover;
 }
 
-.card-body{
-  padding:10px;
-}
-
-.price{
-  color:#ff6a00;
-  font-weight:700;
-}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-
-.modal-content{
-  background:white;
-  padding:30px;
-  border-radius:10px;
-  width:300px;
-}
-
-.modal input{
-  width:100%;
-  padding:10px;
-  margin:10px 0;
-}
-
-.modal button{
-  width:100%;
-  margin-top:5px;
-}
+.card-body{padding:10px}
+.price{color:#ff6a00;font-weight:700}
 
 </style>
 </head>
@@ -148,24 +135,32 @@ header{
 
 <header>
 
-  <!-- IZQUIERDA VACIO PARA CENTRADO -->
-  <div></div>
-
-  <!-- LOGO CENTRADO -->
-  <div class="logo">NORTE <span>MOTOR</span></div>
-
-  <!-- DERECHA -->
-  <div class="header-right">
-    <button class="btn" onclick="abrirLogin()">Ingresar</button>
+  <div class="menu-left">
+    <button class="btn" onclick="toggleMenu()">☰ Ingresar</button>
   </div>
 
+  <div class="logo">NORTE <span>MOTOR</span></div>
+
 </header>
+
+<!-- PANEL IZQUIERDO -->
+<div id="sidebar" class="sidebar">
+  <h3>Acceso</h3>
+
+  <input id="email" placeholder="Email">
+  <input id="pass" type="password" placeholder="Contraseña">
+
+  <button onclick="login()" class="btn">Ingresar</button>
+  <button onclick="registro()" class="btn">Registrarse</button>
+  <button onclick="recuperar()" class="btn">Recuperar contraseña</button>
+
+  <button onclick="toggleMenu()">Cerrar</button>
+</div>
 
 <section class="hero">
   <h1>Encontrá tu próximo vehículo</h1>
 </section>
 
-<!-- CATEGORIAS -->
 <div class="categorias">
   <div class="cat"><i class="fas fa-car"></i><p>Autos</p></div>
   <div class="cat"><i class="fas fa-truck"></i><p>Camionetas</p></div>
@@ -173,22 +168,7 @@ header{
   <div class="cat"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
 </div>
 
-<!-- AUTOS -->
 <div id="autos" class="grid"></div>
-
-<!-- MODAL LOGIN COMPLETO -->
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <h3>Acceso</h3>
-
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Contraseña">
-
-    <button onclick="login()" class="btn">Ingresar</button>
-    <button onclick="registro()" class="btn">Registrarse</button>
-    <button onclick="recuperar()" class="btn">Recuperar contraseña</button>
-  </div>
-</div>
 
 <script type="module">
 
@@ -206,35 +186,35 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* MODAL */
-window.abrirLogin = ()=> loginModal.style.display="flex";
+/* MENU */
+window.toggleMenu = ()=>{
+  sidebar.classList.toggle("active");
+};
 
 /* LOGIN */
 window.login = async ()=>{
   try{
     await signInWithEmailAndPassword(auth,email.value,pass.value);
     alert("Bienvenido");
-    loginModal.style.display="none";
+    toggleMenu();
   }catch(e){
     alert(e.message);
   }
 };
 
-/* REGISTRO */
 window.registro = async ()=>{
   try{
     await createUserWithEmailAndPassword(auth,email.value,pass.value);
-    alert("Usuario creado");
+    alert("Registrado");
   }catch(e){
     alert(e.message);
   }
 };
 
-/* RECUPERAR */
 window.recuperar = async ()=>{
   try{
     await sendPasswordResetEmail(auth,email.value);
-    alert("Revisá tu email");
+    alert("Revisá tu mail");
   }catch(e){
     alert(e.message);
   }
