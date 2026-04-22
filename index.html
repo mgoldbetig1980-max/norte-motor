@@ -2,13 +2,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Norte Motor PRO</title>
+<title>Norte Motor</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-body{margin:0;font-family:'Poppins';background:#eef2f7}
+body{
+  margin:0;
+  font-family:'Poppins', sans-serif;
+  background:#eef2f7;
+}
 
 /* HEADER */
 header{
@@ -20,7 +23,22 @@ header{
   position:relative;
 }
 
-/* LOGO CENTRADO */
+/* IZQUIERDA */
+.header-left{
+  position:absolute;
+  left:20px;
+}
+
+.header-left button{
+  background:none;
+  border:none;
+  color:white;
+  margin-right:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* LOGO */
 .logo{
   color:white;
   font-size:26px;
@@ -28,51 +46,30 @@ header{
 }
 .logo span{color:#ff6a00}
 
-/* BOTON IZQUIERDA */
-.menu-left{
-  position:absolute;
-  left:20px;
-}
-
-.btn{
-  background:#ff6a00;
-  color:white;
-  border:none;
-  padding:10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-/* PANEL LATERAL */
-.sidebar{
-  position:fixed;
-  top:0;
-  left:-300px;
+/* FORMULARIO */
+.auth-box{
+  display:none;
   width:300px;
-  height:100%;
+  margin:20px auto;
   background:white;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
   padding:20px;
-  transition:0.3s;
+  border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
-.sidebar.active{
-  left:0;
-}
-
-.sidebar h3{
-  margin-top:0;
-}
-
-.sidebar input{
+.auth-box input{
   width:100%;
   padding:10px;
   margin:10px 0;
 }
 
-.sidebar button{
+.auth-box button{
   width:100%;
-  margin:5px 0;
+  padding:10px;
+  background:#ff6a00;
+  color:white;
+  border:none;
+  margin-top:5px;
 }
 
 /* HERO */
@@ -99,35 +96,6 @@ header{
   border-radius:12px;
   text-align:center;
 }
-
-.cat i{
-  font-size:30px;
-  color:#1e3a8a;
-}
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  padding:40px;
-}
-
-.card{
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-}
-
-.card-body{padding:10px}
-.price{color:#ff6a00;font-weight:700}
-
 </style>
 </head>
 
@@ -135,60 +103,69 @@ header{
 
 <header>
 
-  <div class="menu-left">
-    <button class="btn" onclick="toggleMenu()">☰ Ingresar</button>
+  <div class="header-left">
+    <button onclick="mostrar('login')">Ingresar</button>
+    <button onclick="mostrar('registro')">Registrarse</button>
+    <button onclick="mostrar('recuperar')">Recuperar</button>
   </div>
 
   <div class="logo">NORTE <span>MOTOR</span></div>
 
 </header>
 
-<!-- PANEL IZQUIERDO -->
-<div id="sidebar" class="sidebar">
-  <h3>Acceso</h3>
-
+<!-- FORMULARIOS -->
+<div id="loginBox" class="auth-box">
+  <h3>Ingresar</h3>
   <input id="email" placeholder="Email">
   <input id="pass" type="password" placeholder="Contraseña">
+  <button onclick="login()">Ingresar</button>
+</div>
 
-  <button onclick="login()" class="btn">Ingresar</button>
-  <button onclick="registro()" class="btn">Registrarse</button>
-  <button onclick="recuperar()" class="btn">Recuperar contraseña</button>
+<div id="registroBox" class="auth-box">
+  <h3>Registrarse</h3>
+  <input id="email2" placeholder="Email">
+  <input id="pass2" type="password" placeholder="Contraseña">
+  <button onclick="registro()">Crear cuenta</button>
+</div>
 
-  <button onclick="toggleMenu()">Cerrar</button>
+<div id="recuperarBox" class="auth-box">
+  <h3>Recuperar contraseña</h3>
+  <input id="email3" placeholder="Email">
+  <button onclick="recuperar()">Enviar</button>
 </div>
 
 <section class="hero">
   <h1>Encontrá tu próximo vehículo</h1>
 </section>
 
-<div class="categorias">
-  <div class="cat"><i class="fas fa-car"></i><p>Autos</p></div>
-  <div class="cat"><i class="fas fa-truck"></i><p>Camionetas</p></div>
-  <div class="cat"><i class="fas fa-motorcycle"></i><p>Motos</p></div>
-  <div class="cat"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
-</div>
-
-<div id="autos" class="grid"></div>
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
+ apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
-  projectId: "norte-motor"
+  projectId: "norte-motor",
+  storageBucket: "norte-motor.firebasestorage.app",
+  messagingSenderId: "192628890922",
+  appId: "1:192628890922:web:48bc1972f62216c3535253",
+  measurementId: "G-BX1FCDC3P0"
 };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-/* MENU */
-window.toggleMenu = ()=>{
-  sidebar.classList.toggle("active");
+/* MOSTRAR FORM */
+window.mostrar = (tipo)=>{
+  loginBox.style.display="none";
+  registroBox.style.display="none";
+  recuperarBox.style.display="none";
+
+  if(tipo=="login") loginBox.style.display="block";
+  if(tipo=="registro") registroBox.style.display="block";
+  if(tipo=="recuperar") recuperarBox.style.display="block";
 };
 
 /* LOGIN */
@@ -196,48 +173,30 @@ window.login = async ()=>{
   try{
     await signInWithEmailAndPassword(auth,email.value,pass.value);
     alert("Bienvenido");
-    toggleMenu();
   }catch(e){
     alert(e.message);
   }
 };
 
+/* REGISTRO */
 window.registro = async ()=>{
   try{
-    await createUserWithEmailAndPassword(auth,email.value,pass.value);
-    alert("Registrado");
+    await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
+    alert("Cuenta creada");
   }catch(e){
     alert(e.message);
   }
 };
 
+/* RECUPERAR */
 window.recuperar = async ()=>{
   try{
-    await sendPasswordResetEmail(auth,email.value);
-    alert("Revisá tu mail");
+    await sendPasswordResetEmail(auth,email3.value);
+    alert("Revisá tu email");
   }catch(e){
     alert(e.message);
   }
 };
-
-/* AUTOS */
-async function cargarAutos(){
-  const data = await getDocs(collection(db,"autos"));
-  autos.innerHTML="";
-  data.forEach(doc=>{
-    const a = doc.data();
-    autos.innerHTML+=`
-      <div class="card">
-        <img src="${a.imagen}">
-        <div class="card-body">
-          <h3>${a.nombre}</h3>
-          <div class="price">$${a.precio}</div>
-        </div>
-      </div>`;
-  });
-}
-
-cargarAutos();
 
 </script>
 
