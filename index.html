@@ -3,265 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <title>Norte Motor PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-
-body{
-  margin:0;
-  font-family:'Poppins', sans-serif;
-  background:#f4f6f9;
-}
+body{margin:0;font-family:'Poppins';background:#eef2f7}
 
 /* HEADER */
-header{
-  background:#1e3a8a;
-  padding:15px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-size:24px;
-  font-weight:700;
-  color:white;
-}
-.logo span{ color:#ff6a00; }
-
-nav a{
-  color:white;
-  margin:0 15px;
-  text-decoration:none;
-}
-
-.btn{
-  background:#ff6a00;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  cursor:pointer;
-}
+header{background:#1e3a8a;padding:15px 60px;display:flex;justify-content:space-between;align-items:center}
+.logo{color:white;font-weight:700}
+.logo span{color:#ff6a00}
+nav a{color:white;margin:0 10px;text-decoration:none}
+.btn{background:#ff6a00;color:white;border:none;padding:10px;border-radius:6px;cursor:pointer}
 
 /* HERO */
-.hero{
-  position:relative;
-  height:460px;
-  display:flex;
-  align-items:center;
-  padding:60px;
-  color:white;
-  background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920') center/cover;
-}
+.hero{height:400px;background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920') center/cover;display:flex;align-items:center}
+.hero h1{color:white;padding-left:60px}
 
-.hero::before{
-  content:"";
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.5);
-}
+/* CATEGORIAS */
+.categorias{display:flex;gap:20px;justify-content:center;margin:30px}
+.cat{background:white;padding:20px;border-radius:10px;text-align:center}
+.cat i{font-size:30px;color:#1e3a8a}
 
-.hero > div{
-  position:relative;
-  z-index:2;
-}
-
-.hero h1{ font-size:46px; }
-
-/* BUSCADOR */
-.search-box{
-  display:flex;
-  gap:10px;
-  background:white;
-  padding:15px;
-  border-radius:10px;
-}
-
-.search-box input{
-  border:none;
-  padding:10px;
-  width:150px;
-}
-
-/* CATEGORIAS (ARREGLADO) */
-.categorias{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-top:30px; /* 👈 YA NO SE SUPERPONE */
-  padding:20px;
-}
-
-.cat{
-  background:white;
-  width:200px;
-  padding:25px;
-  border-radius:14px;
-  text-align:center;
-  box-shadow:0 5px 15px rgba(0,0,0,0.15);
-}
-
-.cat img{
-  width:60px;
-  margin-bottom:10px;
-}
-
-/* GRID AUTOS */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  padding:40px;
-}
-
-.card{
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-}
-
-.card-body{
-  padding:15px;
-}
-
-.price{
-  color:#ff6a00;
-  font-weight:700;
-}
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:40px}
+.card{background:white;border-radius:10px;overflow:hidden}
+.card img{width:100%;height:180px;object-fit:cover}
+.card-body{padding:10px}
+.price{color:#ff6a00;font-weight:700}
 
 /* PANEL */
-.panel{
-  display:none;
-  padding:40px;
-}
+.panel{display:none;padding:30px}
+.panel input{display:block;margin:10px 0;padding:10px}
 
-.panel input{
-  display:block;
-  margin:10px 0;
-  padding:10px;
-  width:250px;
-}
-
-/* LOGIN */
-.modal{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-
-.modal-content{
-  background:white;
-  padding:30px;
-  border-radius:10px;
-}
-
+/* MODAL */
+.modal{position:fixed;width:100%;height:100%;background:#0008;display:none;justify-content:center;align-items:center}
+.modal-content{background:white;padding:20px;border-radius:10px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">NORTE <span>MOTOR</span></div>
-
-  <nav>
-    <a href="#">Inicio</a>
-    <a href="#">Autos</a>
-    <a href="#">Camionetas</a>
-    <a href="#">Motos</a>
-    <a href="#">Embarcaciones</a>
-  </nav>
-
-  <div>
-    <button class="btn" onclick="abrirLogin()">Ingresar</button>
-    <button class="btn" onclick="abrirPanel()">Mi Panel</button>
-  </div>
+<div class="logo">NORTE <span>MOTOR</span></div>
+<nav>
+<a>Inicio</a><a>Autos</a><a>Motos</a>
+</nav>
+<div>
+<button class="btn" onclick="loginModal.style.display='flex'">Ingresar</button>
+<button class="btn" onclick="abrirPanel()">Mi Panel</button>
+</div>
 </header>
 
 <section class="hero">
-  <div>
-    <h1>Encontrá tu próximo vehículo</h1>
-
-    <div class="search-box">
-      <input placeholder="¿Qué buscás?">
-      <input placeholder="Modelo">
-      <input placeholder="Año">
-      <input placeholder="Precio Máx">
-      <button class="btn">Buscar</button>
-    </div>
-  </div>
+<h1>Encontrá tu vehículo</h1>
 </section>
 
-<!-- CATEGORIAS -->
 <div class="categorias">
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/743/743922.png">
-    <h3>Autos</h3>
-  </div>
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/741/741407.png">
-    <h3>Camionetas</h3>
-  </div>
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
-    <h3>Motos</h3>
-  </div>
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
-    <h3>Embarcaciones</h3>
-  </div>
+<div class="cat"><i class="fas fa-car"></i><p>Autos</p></div>
+<div class="cat"><i class="fas fa-truck"></i><p>Camionetas</p></div>
+<div class="cat"><i class="fas fa-motorcycle"></i><p>Motos</p></div>
+<div class="cat"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
 </div>
 
-<h2 style="padding:40px;">Vehículos</h2>
 <div id="autos" class="grid"></div>
 
-<!-- PANEL USUARIO -->
+<!-- PANEL -->
 <div id="panel" class="panel">
-  <h2>Publicar Vehículo</h2>
+<h2>Publicar vehículo</h2>
+<input id="nombre" placeholder="Nombre">
+<input id="precio" placeholder="Precio">
+<input type="file" id="file">
+<button class="btn" onclick="publicar()">Publicar</button>
 
-  <input id="nombre" placeholder="Nombre">
-  <input id="precio" placeholder="Precio">
-  <input id="imagen" placeholder="URL imagen">
-
-  <button class="btn" onclick="publicar()">Publicar</button>
-
-  <h3>Mis Autos</h3>
-  <div id="misAutos"></div>
+<h3>Mis publicaciones</h3>
+<div id="misAutos"></div>
 </div>
 
 <!-- LOGIN -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h3>Login</h3>
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Contraseña">
-
-    <button onclick="login()" class="btn">Ingresar</button>
-    <button onclick="registro()" class="btn">Registrarse</button>
-    <button onclick="recuperar()" class="btn">Recuperar</button>
-  </div>
+<div id="loginModal" class="modal">
+<div class="modal-content">
+<input id="email" placeholder="Email">
+<input id="pass" type="password">
+<button onclick="login()">Ingresar</button>
+<button onclick="registro()">Registro</button>
+<button onclick="recuperar()">Recuperar</button>
+</div>
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+ apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
   storageBucket: "norte-motor.firebasestorage.app",
@@ -273,79 +113,94 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 /* LOGIN */
-window.abrirLogin = ()=> modal.style.display="flex";
-
-window.login = async ()=>{
-  await signInWithEmailAndPassword(auth,email.value,pass.value);
-  modal.style.display="none";
-}
-
-window.registro = async ()=>{
-  await createUserWithEmailAndPassword(auth,email.value,pass.value);
-}
-
-window.recuperar = async ()=>{
-  await sendPasswordResetEmail(auth,email.value);
-  alert("Mail enviado");
-}
+window.login = ()=> signInWithEmailAndPassword(auth,email.value,pass.value);
+window.registro = ()=> createUserWithEmailAndPassword(auth,email.value,pass.value);
+window.recuperar = ()=> sendPasswordResetEmail(auth,email.value);
 
 /* PANEL */
 window.abrirPanel = ()=>{
-  if(!auth.currentUser){
-    alert("Primero inicia sesión");
-    return;
-  }
-  panel.style.display="block";
-}
+ if(!auth.currentUser) return alert("Iniciá sesión");
+ panel.style.display="block";
+};
 
 /* PUBLICAR */
 window.publicar = async ()=>{
-  await addDoc(collection(db,"autos"),{
-    nombre:nombre.value,
-    precio:precio.value,
-    imagen:imagen.value,
-    user:auth.currentUser.email
-  });
-  alert("Publicado");
-  cargarAutos();
-  cargarMisAutos();
-}
+ const archivo = file.files[0];
+ const refImg = ref(storage,"autos/"+Date.now()+archivo.name);
+ await uploadBytes(refImg,archivo);
+ const url = await getDownloadURL(refImg);
 
-/* LISTAR */
+ await addDoc(collection(db,"autos"),{
+  nombre:nombre.value,
+  precio:precio.value,
+  imagen:url,
+  user:auth.currentUser.email
+ });
+
+ cargarAutos();
+ cargarMisAutos();
+};
+
+/* LISTAR TODOS */
 async function cargarAutos(){
-  const q = await getDocs(collection(db,"autos"));
-  autos.innerHTML="";
-  q.forEach(doc=>{
-    const a = doc.data();
-    autos.innerHTML+=`
-    <div class="card">
-      <img src="${a.imagen}">
-      <div class="card-body">
-        <h3>${a.nombre}</h3>
-        <div class="price">$${a.precio}</div>
-      </div>
-    </div>`;
-  });
+ const data = await getDocs(collection(db,"autos"));
+ autos.innerHTML="";
+ data.forEach(d=>{
+  let a=d.data();
+  autos.innerHTML+=`
+  <div class="card">
+    <img src="${a.imagen}">
+    <div class="card-body">
+      <h3>${a.nombre}</h3>
+      <div class="price">$${a.precio}</div>
+    </div>
+  </div>`;
+ });
 }
 
 /* MIS AUTOS */
 async function cargarMisAutos(){
-  const q = query(collection(db,"autos"), where("user","==",auth.currentUser.email));
-  const data = await getDocs(q);
-  misAutos.innerHTML="";
-  data.forEach(doc=>{
-    const a = doc.data();
-    misAutos.innerHTML+=`<p>${a.nombre} - $${a.precio}</p>`;
-  });
+ const q=query(collection(db,"autos"), where("user","==",auth.currentUser.email));
+ const data=await getDocs(q);
+ misAutos.innerHTML="";
+ data.forEach(d=>{
+  let a=d.data();
+  misAutos.innerHTML+=`
+  <div>
+    ${a.nombre} - $${a.precio}
+    <button onclick="eliminar('${d.id}')">❌</button>
+    <button onclick="editar('${d.id}','${a.nombre}','${a.precio}')">✏️</button>
+  </div>`;
+ });
 }
 
+/* ELIMINAR */
+window.eliminar = async(id)=>{
+ await deleteDoc(doc(db,"autos",id));
+ cargarAutos(); cargarMisAutos();
+};
+
+/* EDITAR */
+window.editar = async(id,n,p)=>{
+ const nombreNuevo = prompt("Nombre",n);
+ const precioNuevo = prompt("Precio",p);
+
+ await updateDoc(doc(db,"autos",id),{
+  nombre:nombreNuevo,
+  precio:precioNuevo
+ });
+
+ cargarAutos(); cargarMisAutos();
+};
+
 onAuthStateChanged(auth,user=>{
-  if(user){
-    cargarAutos();
-    cargarMisAutos();
-  }
+ if(user){
+  cargarAutos();
+  cargarMisAutos();
+ }
 });
 
 cargarAutos();
