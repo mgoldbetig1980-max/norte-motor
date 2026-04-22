@@ -9,85 +9,28 @@
 
 <style>
 body{margin:0;font-family:'Poppins';background:#eef2f7}
-
-/* HEADER */
-header{
-  background:#1e3a8a;
-  height:90px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+header{background:#1e3a8a;height:90px;display:flex;justify-content:center;align-items:center}
 .logo{color:white;font-size:28px;font-weight:700}
 .logo span{color:#ff6a00}
-
-/* HERO */
 .hero{height:200px;background:#1e3a8a}
 
-/* CATEGORIAS */
-.categorias{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin:20px;
-}
-.cat{
-  background:white;
-  padding:20px;
-  border-radius:10px;
-  width:120px;
-  text-align:center;
-  cursor:pointer;
-}
+.categorias{display:flex;justify-content:center;gap:20px;margin:20px}
+.cat{background:white;padding:20px;border-radius:10px;width:120px;text-align:center;cursor:pointer}
 .cat i{font-size:28px;color:#1e3a8a}
 
-/* FILTROS PRO */
-#buscador{
-  display:none;
-  background:white;
-  padding:20px;
-  margin:20px;
-  border-radius:10px;
-}
-.filtros{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-.filtros input,.filtros select{
-  padding:10px;
-}
+#buscador{display:none;background:white;padding:20px;margin:20px;border-radius:10px}
+.filtros{display:flex;flex-wrap:wrap;gap:10px}
+.filtros input,.filtros select{padding:10px}
 
-/* LAYOUT */
 .main{display:flex;padding:20px;gap:20px}
 
-/* SIDEBAR */
 .sidebar{width:250px}
-.menu-btn{
-  width:100%;
-  padding:12px;
-  margin-bottom:10px;
-  background:#ff6a00;
-  color:white;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-.form-box{
-  display:none;
-  background:white;
-  padding:15px;
-  border-radius:10px;
-}
+.menu-btn{width:100%;padding:12px;margin-bottom:10px;background:#ff6a00;color:white;border:none;border-radius:6px;cursor:pointer}
+.form-box{display:none;background:white;padding:15px;border-radius:10px}
 .form-box input{width:100%;padding:10px;margin:5px 0}
 
-/* GRID */
 .content{flex:1}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 .card{background:white;border-radius:10px;overflow:hidden}
 .card img{width:100%;height:180px;object-fit:cover}
 .card-body{padding:10px}
@@ -105,11 +48,11 @@ header{
 
 <!-- CATEGORIAS -->
 <div class="categorias">
-  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-car"></i><p>Autos</p></div>
-  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-truck"></i><p>Camionetas</p></div>
-  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-motorcycle"></i><p>Motos</p></div>
-  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
-  <div class="cat" onclick="abrirBuscador()"><i class="fas fa-truck-moving"></i><p>Camiones</p></div>
+  <div class="cat" onclick="abrirBuscador('autos')"><i class="fas fa-car"></i><p>Autos</p></div>
+  <div class="cat" onclick="abrirBuscador('camionetas')"><i class="fas fa-truck"></i><p>Camionetas</p></div>
+  <div class="cat" onclick="abrirBuscador('motos')"><i class="fas fa-motorcycle"></i><p>Motos</p></div>
+  <div class="cat" onclick="abrirBuscador('embarcaciones')"><i class="fas fa-ship"></i><p>Embarcaciones</p></div>
+  <div class="cat" onclick="abrirBuscador('camiones')"><i class="fas fa-truck-moving"></i><p>Camiones</p></div>
 </div>
 
 <!-- FILTROS -->
@@ -117,19 +60,10 @@ header{
   <h3>Filtrar vehículos</h3>
 
   <div class="filtros">
-
-    <select id="marca">
-      <option value="">Marca</option>
-      <option>Toyota</option><option>Ford</option><option>Chevrolet</option>
-      <option>Volkswagen</option><option>Fiat</option><option>Renault</option>
-      <option>Peugeot</option><option>Honda</option><option>Nissan</option>
-
-      <!-- CHINAS -->
-      <option>BYD</option><option>Chery</option><option>Geely</option>
-      <option>Haval</option><option>Changan</option><option>JAC</option>
-    </select>
+    <select id="marca"></select>
 
     <input id="version" placeholder="Versión">
+
     <select id="transmision">
       <option value="">Transmisión</option>
       <option>Manual</option>
@@ -144,47 +78,45 @@ header{
       <option>Eléctrico</option>
     </select>
 
-    <input id="anio" placeholder="Año">
+    <input id="anioMin" placeholder="Año desde">
+    <input id="anioMax" placeholder="Año hasta">
+
     <input id="precioMin" placeholder="Precio desde">
     <input id="precioMax" placeholder="Precio hasta">
+
     <input id="kmMin" placeholder="KM desde">
     <input id="kmMax" placeholder="KM hasta">
 
     <button onclick="filtrar()">Buscar</button>
-
   </div>
 </div>
 
 <div class="main">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
-    <button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
-    <button class="menu-btn" onclick="mostrar('recuperar')">Recuperar</button>
+<div class="sidebar">
+  <button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
+  <button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
+  <button class="menu-btn" onclick="mostrar('recuperar')">Recuperar contraseña</button>
 
-    <div id="loginBox" class="form-box">
-      <input id="email">
-      <input id="pass" type="password">
-      <button onclick="login()">Ingresar</button>
-    </div>
-
-    <div id="registroBox" class="form-box">
-      <input id="email2">
-      <input id="pass2" type="password">
-      <button onclick="registro()">Crear</button>
-    </div>
-
-    <div id="recuperarBox" class="form-box">
-      <input id="email3">
-      <button onclick="recuperar()">Enviar</button>
-    </div>
+  <div id="loginBox" class="form-box">
+    <input id="email"><input id="pass" type="password">
+    <button onclick="login()">Ingresar</button>
   </div>
 
-  <!-- AUTOS -->
-  <div class="content">
-    <div id="autos" class="grid"></div>
+  <div id="registroBox" class="form-box">
+    <input id="email2"><input id="pass2" type="password">
+    <button onclick="registro()">Crear</button>
   </div>
+
+  <div id="recuperarBox" class="form-box">
+    <input id="email3">
+    <button onclick="recuperar()">Enviar</button>
+  </div>
+</div>
+
+<div class="content">
+  <div id="autos" class="grid"></div>
+</div>
 
 </div>
 
@@ -195,7 +127,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, se
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
   storageBucket: "norte-motor.firebasestorage.app",
@@ -204,48 +136,39 @@ const firebaseConfig = {
   measurementId: "G-BX1FCDC3P0"
 };
 
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* FORMULARIOS */
-window.mostrar = (tipo)=>{
-  loginBox.style.display="none";
-  registroBox.style.display="none";
-  recuperarBox.style.display="none";
+let categoriaActual = "";
 
-  if(tipo=="login") loginBox.style.display="block";
-  if(tipo=="registro") registroBox.style.display="block";
-  if(tipo=="recuperar") recuperarBox.style.display="block";
+/* MARCAS POR CATEGORIA */
+const marcas = {
+
+autos:["Toyota","Ford","Chevrolet","Volkswagen","Fiat","Renault","Peugeot","Honda","Nissan","BYD","Chery","Geely","Haval"],
+
+camionetas:["Toyota","Ford","Chevrolet","Volkswagen","Nissan","Jeep","RAM","BYD","Great Wall"],
+
+motos:["Yamaha","Honda","Zanella","Motomel","Gilera","Corven","KTM","Ducati","BMW","Royal Enfield","Benelli","CFMoto"],
+
+camiones:["Iveco","Scania","Mercedes-Benz","Volvo","MAN","DAF","Foton","JAC","Dongfeng","Sinotruk"],
+
+embarcaciones:["Yamaha","Mercury","Honda","Suzuki","Evinrude","Tohatsu"]
 };
 
-/* LOGIN */
-window.login = async ()=>{
-  try{
-    await signInWithEmailAndPassword(auth,email.value,pass.value);
-    alert("Bienvenido");
-  }catch(e){alert(e.message);}
-};
-
-window.registro = async ()=>{
-  try{
-    await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
-    alert("Cuenta creada");
-  }catch(e){alert(e.message);}
-};
-
-window.recuperar = async ()=>{
-  try{
-    await sendPasswordResetEmail(auth,email3.value);
-    alert("Email enviado");
-  }catch(e){alert(e.message);}
-};
-
-/* BUSCADOR */
-window.abrirBuscador = ()=>{
+/* ABRIR BUSCADOR */
+window.abrirBuscador = (cat)=>{
+  categoriaActual = cat;
   buscador.style.display="block";
+
+  marca.innerHTML = `<option value="">Marca</option>`;
+  marcas[cat].forEach(m=>{
+    marca.innerHTML += `<option>${m}</option>`;
+  });
 };
 
+/* FILTRAR */
 window.filtrar = async ()=>{
   const data = await getDocs(collection(db,"autos"));
   autos.innerHTML="";
@@ -253,10 +176,11 @@ window.filtrar = async ()=>{
   data.forEach(doc=>{
     const a = doc.data();
 
+    if(categoriaActual && a.categoria !== categoriaActual) return;
     if(marca.value && a.marca !== marca.value) return;
-    if(version.value && !a.version?.includes(version.value)) return;
-    if(transmision.value && a.transmision !== transmision.value) return;
-    if(combustible.value && a.combustible !== combustible.value) return;
+
+    if(anioMin.value && a.anio < anioMin.value) return;
+    if(anioMax.value && a.anio > anioMax.value) return;
 
     if(precioMin.value && a.precio < precioMin.value) return;
     if(precioMax.value && a.precio > precioMax.value) return;
@@ -275,24 +199,31 @@ window.filtrar = async ()=>{
   });
 };
 
-/* CARGA INICIAL */
-async function cargarAutos(){
-  const data = await getDocs(collection(db,"autos"));
-  autos.innerHTML="";
-  data.forEach(doc=>{
-    const a = doc.data();
-    autos.innerHTML+=`
-      <div class="card">
-        <img src="${a.imagen}">
-        <div class="card-body">
-          <h3>${a.nombre}</h3>
-          <div class="price">$${a.precio}</div>
-        </div>
-      </div>`;
-  });
-}
+/* LOGIN */
+window.login = async ()=>{
+  await signInWithEmailAndPassword(auth,email.value,pass.value);
+};
 
-cargarAutos();
+/* REGISTRO */
+window.registro = async ()=>{
+  await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
+};
+
+/* RECUPERAR */
+window.recuperar = async ()=>{
+  await sendPasswordResetEmail(auth,email3.value);
+};
+
+/* MOSTRAR FORM */
+window.mostrar = (tipo)=>{
+  loginBox.style.display="none";
+  registroBox.style.display="none";
+  recuperarBox.style.display="none";
+
+  if(tipo=="login") loginBox.style.display="block";
+  if(tipo=="registro") registroBox.style.display="block";
+  if(tipo=="recuperar") recuperarBox.style.display="block";
+};
 
 </script>
 
