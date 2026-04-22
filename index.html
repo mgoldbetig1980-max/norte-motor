@@ -30,18 +30,10 @@ header{
 }
 .logo span{color:#ff6a00}
 
-/* HERO LIMPIO */
+/* HERO (SIN TEXTO DUPLICADO) */
 .hero{
-  height:300px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  height:250px;
   background:#1e3a8a;
-  color:white;
-}
-
-.hero h1{
-  font-size:42px;
 }
 
 /* CATEGORIAS */
@@ -58,13 +50,11 @@ header{
   border-radius:10px;
   text-align:center;
   width:140px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .cat i{
   font-size:30px;
   color:#1e3a8a;
-  margin-bottom:8px;
 }
 
 /* LAYOUT */
@@ -74,33 +64,44 @@ header{
   padding:20px;
 }
 
-/* LOGIN IZQUIERDA */
+/* IZQUIERDA */
 .sidebar{
   width:260px;
+}
+
+/* BOTONES */
+.menu-btn{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  background:#ff6a00;
+  color:white;
+  border:none;
+  cursor:pointer;
+  border-radius:6px;
+}
+
+/* FORMULARIOS */
+.form-box{
+  display:none;
   background:white;
-  padding:20px;
+  padding:15px;
   border-radius:10px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  margin-top:10px;
 }
 
-.sidebar h3{
-  margin-top:0;
-}
-
-.sidebar input{
+.form-box input{
   width:100%;
   padding:10px;
   margin:8px 0;
 }
 
-.sidebar button{
+.form-box button{
   width:100%;
   padding:10px;
-  margin-top:5px;
-  background:#ff6a00;
-  border:none;
+  background:#1e3a8a;
   color:white;
-  cursor:pointer;
+  border:none;
 }
 
 /* CONTENIDO */
@@ -144,10 +145,7 @@ header{
   <div class="logo">NORTE <span>MOTOR</span></div>
 </header>
 
-<!-- BANNER LIMPIO -->
-<section class="hero">
-  <h1>NORTE MOTOR</h1>
-</section>
+<section class="hero"></section>
 
 <!-- CATEGORIAS -->
 <div class="categorias">
@@ -158,19 +156,35 @@ header{
   <div class="cat"><i class="fas fa-truck-moving"></i><p>Camiones</p></div>
 </div>
 
-<!-- CONTENIDO -->
 <div class="main">
 
-  <!-- IZQUIERDA LOGIN -->
+  <!-- IZQUIERDA -->
   <div class="sidebar">
-    <h3>Acceso</h3>
 
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Contraseña">
+    <button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
+    <button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
+    <button class="menu-btn" onclick="mostrar('recuperar')">Recuperar contraseña</button>
 
-    <button onclick="login()">Ingresar</button>
-    <button onclick="registro()">Registrarse</button>
-    <button onclick="recuperar()">Recuperar contraseña</button>
+    <!-- LOGIN -->
+    <div id="loginBox" class="form-box">
+      <input id="email" placeholder="Email">
+      <input id="pass" type="password" placeholder="Contraseña">
+      <button onclick="login()">Ingresar</button>
+    </div>
+
+    <!-- REGISTRO -->
+    <div id="registroBox" class="form-box">
+      <input id="email2" placeholder="Email">
+      <input id="pass2" type="password">
+      <button onclick="registro()">Crear cuenta</button>
+    </div>
+
+    <!-- RECUPERAR -->
+    <div id="recuperarBox" class="form-box">
+      <input id="email3" placeholder="Email">
+      <button onclick="recuperar()">Enviar</button>
+    </div>
+
   </div>
 
   <!-- DERECHA -->
@@ -195,10 +209,20 @@ apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+/* MOSTRAR FORM */
+window.mostrar = (tipo)=>{
+  loginBox.style.display="none";
+  registroBox.style.display="none";
+  recuperarBox.style.display="none";
+
+  if(tipo=="login") loginBox.style.display="block";
+  if(tipo=="registro") registroBox.style.display="block";
+  if(tipo=="recuperar") recuperarBox.style.display="block";
+};
 
 /* LOGIN */
 window.login = async ()=>{
@@ -213,7 +237,7 @@ window.login = async ()=>{
 /* REGISTRO */
 window.registro = async ()=>{
   try{
-    await createUserWithEmailAndPassword(auth,email.value,pass.value);
+    await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
     alert("Cuenta creada");
   }catch(e){
     alert(e.message);
@@ -223,7 +247,7 @@ window.registro = async ()=>{
 /* RECUPERAR */
 window.recuperar = async ()=>{
   try{
-    await sendPasswordResetEmail(auth,email.value);
+    await sendPasswordResetEmail(auth,email3.value);
     alert("Revisá tu mail");
   }catch(e){
     alert(e.message);
