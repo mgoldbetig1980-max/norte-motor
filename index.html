@@ -6,120 +6,166 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { margin:0; font-family:Arial; background:#eef2f7; }
+body{
+  margin:0;
+  font-family:Arial;
+  background:#eef2f7;
+}
 
 /* HEADER */
-header {
+header{
   background:#1e3a8a;
   color:white;
   display:flex;
   justify-content:space-between;
-  padding:15px 30px;
   align-items:center;
+  padding:15px 40px;
 }
-nav a {
+nav a{
   color:white;
-  margin:10px;
+  margin:0 10px;
   text-decoration:none;
 }
-.btn {
+.btn{
   background:#f97316;
   color:white;
   border:none;
   padding:10px 15px;
-  cursor:pointer;
   border-radius:5px;
+  cursor:pointer;
 }
 
 /* HERO */
-.hero {
+.hero{
+  height:500px;
   background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
   url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
   background-size:cover;
-  color:white;
-  padding:120px 40px;
+  display:flex;
+  align-items:center;
 }
-.hero h1 { font-size:45px; }
-.hero p { font-size:28px; }
+.hero-content{
+  width:1100px;
+  margin:auto;
+  color:white;
+}
+.hero h1{ font-size:48px; margin:0; }
+.hero p{ font-size:28px; margin:10px 0 20px; }
 
 /* BUSCADOR */
-.buscador input {
+.buscador{
+  display:flex;
+  gap:10px;
+  background:white;
   padding:10px;
-  margin:5px;
-  border:none;
-  border-radius:5px;
+  border-radius:10px;
 }
-.buscador button {
+.buscador input{
+  flex:1;
+  padding:12px;
+  border:none;
+}
+.buscador button{
   background:#f97316;
   color:white;
-  padding:10px;
   border:none;
+  padding:12px 20px;
 }
 
 /* CATEGORIAS */
-.categorias {
+.categorias{
   display:flex;
-  justify-content:space-around;
-  margin-top:-40px;
+  justify-content:space-between;
+  width:1100px;
+  margin:-40px auto 0;
 }
-.cat {
+.cat{
   background:white;
+  width:23%;
+  text-align:center;
   padding:20px;
   border-radius:10px;
-  text-align:center;
-  width:120px;
   box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
-.cat img { width:50px; }
+.cat img{ width:60px; }
 
-/* SECCION */
-.section { padding:30px; }
-.grid {
+/* SECCIONES */
+.section{
+  width:1100px;
+  margin:auto;
+  padding:40px 0;
+}
+.grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns:repeat(4,1fr);
   gap:20px;
 }
 
-/* CARD */
-.card {
+/* CARD DESTACADO */
+.card{
   background:white;
   border-radius:10px;
   overflow:hidden;
   box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
-.card img {
+.card img{
   width:100%;
-  height:160px;
+  height:180px;
   object-fit:cover;
 }
-.card-body { padding:10px; }
-
-/* DESTACADO */
-.destacado {
+.card-body{
+  padding:15px;
+}
+.card-body h3{
+  margin:5px 0;
+}
+.precio{
+  color:#f97316;
+  font-weight:bold;
+}
+.detalle{
   background:#1e3a8a;
   color:white;
   padding:10px;
-  font-size:12px;
+  border-radius:5px;
+  text-align:center;
+  display:block;
+  margin-top:10px;
+  text-decoration:none;
+}
+
+/* ULTIMOS */
+.card-lite{
+  background:white;
+  border-radius:10px;
+  padding:10px;
+}
+.card-lite img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+}
+.vermas{
+  background:#f97316;
+  color:white;
+  padding:8px;
+  display:block;
+  text-align:center;
+  margin-top:10px;
 }
 
 /* BANNER */
-.banner {
+.banner{
   background:#1e3a8a;
   color:white;
+  padding:40px;
   display:flex;
   justify-content:space-between;
-  padding:30px;
   align-items:center;
-}
-.banner button {
-  background:#f97316;
-  border:none;
-  padding:15px;
-  color:white;
 }
 
 /* FOOTER */
-footer {
+footer{
   background:#1e3a8a;
   color:white;
   display:flex;
@@ -128,7 +174,7 @@ footer {
 }
 
 /* MODAL */
-.modal {
+.modal{
   position:fixed;
   width:100%;
   height:100%;
@@ -137,13 +183,17 @@ footer {
   justify-content:center;
   align-items:center;
 }
-.modal-content {
+.modal-content{
   background:white;
   padding:20px;
   border-radius:10px;
   width:300px;
 }
-input { width:100%; padding:10px; margin:5px 0; }
+input{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+}
 </style>
 </head>
 
@@ -165,14 +215,17 @@ input { width:100%; padding:10px; margin:5px 0; }
 </header>
 
 <section class="hero">
-  <h1>Encontrá tu próximo vehículo</h1>
-  <p>NORTE MOTOR</p>
-  <div class="buscador">
-    <input placeholder="¿Qué buscás?">
-    <input placeholder="Modelo">
-    <input placeholder="Año">
-    <input placeholder="Precio Máx">
-    <button>Buscar</button>
+  <div class="hero-content">
+    <h1>Encontrá tu próximo vehículo</h1>
+    <p>NORTE MOTOR</p>
+
+    <div class="buscador">
+      <input placeholder="¿Qué buscás?">
+      <input placeholder="Modelo">
+      <input placeholder="Año">
+      <input placeholder="Precio Máx">
+      <button>Buscar</button>
+    </div>
   </div>
 </section>
 
@@ -189,7 +242,7 @@ input { width:100%; padding:10px; margin:5px 0; }
 </section>
 
 <section class="section">
-  <h2>Últimos publicados</h2>
+  <h2>Últimos Publicados</h2>
   <div id="cars" class="grid"></div>
 </section>
 
@@ -198,7 +251,7 @@ input { width:100%; padding:10px; margin:5px 0; }
     <h2>¿Querés vender tu vehículo?</h2>
     <p>Publicalo hoy mismo</p>
   </div>
-  <button onclick="abrirPublicar()">Publicar Aviso</button>
+  <button class="btn" onclick="abrirPublicar()">Publicar Aviso</button>
 </section>
 
 <footer>
@@ -233,10 +286,10 @@ input { width:100%; padding:10px; margin:5px 0; }
 <div class="modal" id="publicarModal">
   <div class="modal-content">
     <h3>Publicar</h3>
-    <input id="nombre">
-    <input id="precio">
+    <input id="nombre" placeholder="Nombre">
+    <input id="precio" placeholder="Precio">
     <input type="file" id="file">
-    <input id="telefono">
+    <input id="telefono" placeholder="Teléfono">
     <button onclick="publicar()">Publicar</button>
   </div>
 </div>
@@ -248,7 +301,7 @@ import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstati
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+   apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
   storageBucket: "norte-motor.firebasestorage.app",
@@ -256,16 +309,17 @@ const firebaseConfig = {
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+/* LOGIN */
 window.login = ()=> signInWithEmailAndPassword(auth,email.value,pass.value).catch(e=>alert(e.message));
 window.registrar = ()=> createUserWithEmailAndPassword(auth,email.value,pass.value).catch(e=>alert(e.message));
 window.recuperar = ()=> sendPasswordResetEmail(auth,email.value);
 
+/* PUBLICAR */
 window.abrirPublicar = ()=>{
  if(!auth.currentUser) return alert("Debes iniciar sesión");
  publicarModal.style.display="flex";
@@ -286,6 +340,7 @@ window.publicar = async ()=>{
  });
 };
 
+/* CARGAR */
 onSnapshot(collection(db,"autos"),snap=>{
  cars.innerHTML="";
  destacados.innerHTML="";
@@ -295,12 +350,13 @@ onSnapshot(collection(db,"autos"),snap=>{
 
   let card=`
   <div class="card">
-    ${a.destacado ? '<div class="destacado">DESTACADO</div>' : ''}
     <img src="${a.img}">
     <div class="card-body">
       <h3>${a.nombre}</h3>
-      <p>${a.precio}</p>
-      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">Contactar</a>
+      <p class="precio">${a.precio}</p>
+      <a class="detalle" href="https://wa.me/${a.telefono}" target="_blank">
+        Ver Detalle
+      </a>
     </div>
   </div>`;
 
