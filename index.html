@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { margin:0; font-family:Arial; background:#f3f4f6; }
+body { margin:0; font-family:Arial; background:#f1f5f9; }
 
 /* HEADER */
 header {
@@ -16,7 +16,7 @@ header {
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:15px;
+  padding:15px 30px;
 }
 
 nav a {
@@ -25,37 +25,65 @@ nav a {
   text-decoration:none;
 }
 
-.btn-naranja {
+.btn {
   background:#f97316;
+  color:white;
   border:none;
   padding:10px;
-  color:white;
   cursor:pointer;
 }
 
 /* HERO */
 .hero {
-  background:url('https://images.unsplash.com/photo-1549921296-3a6bfe57a0a9') center/cover;
+  background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
+  url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+  background-size:cover;
   color:white;
-  text-align:center;
-  padding:100px 20px;
+  padding:120px 40px;
+}
+
+.hero h1 { font-size:45px; }
+.hero p { font-size:30px; font-weight:bold; }
+
+/* BUSCADOR */
+.buscador {
+  margin-top:20px;
+}
+
+.buscador input {
+  padding:10px;
+  margin:5px;
+  border:none;
+  border-radius:5px;
+}
+
+.buscador button {
+  background:#f97316;
+  color:white;
+  padding:10px;
+  border:none;
 }
 
 /* CATEGORIAS */
 .categorias {
   display:flex;
   justify-content:space-around;
-  padding:20px;
+  margin-top:-40px;
 }
 
-.categorias div {
+.cat {
   background:white;
   padding:20px;
   border-radius:10px;
+  text-align:center;
+  width:120px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* SECTIONS */
-.section { padding:20px; }
+.cat img { width:50px; }
+
+/* SECCION */
+.section { padding:30px; }
 
 /* GRID */
 .grid {
@@ -69,6 +97,7 @@ nav a {
   background:white;
   border-radius:10px;
   overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .card img {
@@ -77,32 +106,13 @@ nav a {
   object-fit:cover;
 }
 
-.card-body {
-  padding:10px;
-}
-
-.btn {
-  background:#f97316;
-  color:white;
-  padding:10px;
-  display:block;
-  text-align:center;
-  text-decoration:none;
-}
-
-/* FOOTER */
-footer {
-  background:#1e3a8a;
-  color:white;
-  text-align:center;
-  padding:20px;
-}
+.card-body { padding:10px; }
 
 /* MODAL */
 .modal {
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  width:100%;
+  height:100%;
   background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
@@ -116,7 +126,7 @@ footer {
   width:300px;
 }
 
-input, select {
+input,select {
   width:100%;
   padding:10px;
   margin:5px 0;
@@ -129,35 +139,54 @@ input, select {
 <header>
   <strong>🚗 NORTE MOTOR</strong>
   <nav>
-    <a href="#">Inicio</a>
-    <a href="#">Autos</a>
-    <a href="#">Camionetas</a>
-    <a href="#">Motos</a>
-    <a href="#">Embarcaciones</a>
+    <a>Inicio</a>
+    <a>Autos</a>
+    <a>Camionetas</a>
+    <a>Motos</a>
+    <a>Embarcaciones</a>
   </nav>
-  <button class="btn-naranja" onclick="abrirLogin()">Ingresar</button>
+  <div>
+    <button class="btn" onclick="loginModal.style.display='flex'">Ingresar</button>
+    <button class="btn" onclick="abrirPublicar()">Publicar</button>
+  </div>
 </header>
 
 <section class="hero">
   <h1>Encontrá tu próximo vehículo</h1>
   <p>NORTE MOTOR</p>
+
+  <div class="buscador">
+    <input placeholder="¿Qué buscás?">
+    <input placeholder="Modelo">
+    <input placeholder="Año">
+    <input placeholder="Precio Máx">
+    <button>Buscar</button>
+  </div>
 </section>
 
 <section class="categorias">
-  <div>🚗 Autos</div>
-  <div>🚙 Camionetas</div>
-  <div>🏍️ Motos</div>
-  <div>🚤 Embarcaciones</div>
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/743/743922.png">
+    <p>Autos</p>
+  </div>
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/743/743131.png">
+    <p>Camionetas</p>
+  </div>
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
+    <p>Motos</p>
+  </div>
+  <div class="cat">
+    <img src="https://cdn-icons-png.flaticon.com/512/2062/2062177.png">
+    <p>Embarcaciones</p>
+  </div>
 </section>
 
 <section class="section">
   <h2>Últimos publicados</h2>
   <div id="cars" class="grid"></div>
 </section>
-
-<footer>
-  © Norte Motor - Todos los derechos reservados
-</footer>
 
 <!-- LOGIN -->
 <div class="modal" id="loginModal">
@@ -180,20 +209,13 @@ input, select {
     <input type="file" id="file">
     <input id="telefono" placeholder="Teléfono">
 
-    <select id="categoriaInput">
-      <option value="auto">Auto</option>
-      <option value="camioneta">Camioneta</option>
-      <option value="moto">Moto</option>
-      <option value="embarcacion">Embarcación</option>
-    </select>
-
     <button onclick="publicar()">Publicar</button>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -208,15 +230,32 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-window.abrirLogin = ()=> loginModal.style.display="flex";
+// LOGIN
+window.login = () => {
+ signInWithEmailAndPassword(auth,email.value,pass.value)
+ .then(()=>alert("Bienvenido"))
+ .catch(e=>alert(e.message));
+};
 
-window.login = ()=> signInWithEmailAndPassword(auth,email.value,pass.value);
-window.registrar = ()=> createUserWithEmailAndPassword(auth,email.value,pass.value);
-window.recuperar = ()=> sendPasswordResetEmail(auth,email.value);
+window.registrar = () => {
+ createUserWithEmailAndPassword(auth,email.value,pass.value)
+ .then(()=>alert("Usuario creado"))
+ .catch(e=>alert(e.message));
+};
+
+window.recuperar = () => {
+ sendPasswordResetEmail(auth,email.value)
+ .then(()=>alert("Revisá tu correo"))
+ .catch(e=>alert(e.message));
+};
+
+// PUBLICAR
+window.abrirPublicar = ()=>{
+ if(!auth.currentUser) return alert("Debes iniciar sesión");
+ publicarModal.style.display="flex";
+};
 
 window.publicar = async ()=>{
- if(!auth.currentUser) return alert("Debes iniciar sesión");
-
  const archivo=file.files[0];
  const refImg=ref(storage,"autos/"+Date.now()+archivo.name);
 
@@ -234,6 +273,7 @@ window.publicar = async ()=>{
  publicarModal.style.display="none";
 };
 
+// MOSTRAR AUTOS
 onSnapshot(collection(db,"autos"),snap=>{
  cars.innerHTML="";
  snap.forEach(d=>{
