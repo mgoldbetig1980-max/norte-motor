@@ -25,27 +25,31 @@ header{
 
 .logo{
   color:white;
-  font-size:26px;
+  font-size:28px;
   font-weight:700;
 }
 .logo span{color:#ff6a00}
 
-/* HERO */
+/* HERO LIMPIO */
 .hero{
-  height:350px;
-  background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920') center/cover;
+  height:300px;
   display:flex;
+  justify-content:center;
   align-items:center;
-  padding:40px;
+  background:#1e3a8a;
   color:white;
+}
+
+.hero h1{
+  font-size:42px;
 }
 
 /* CATEGORIAS */
 .categorias{
   display:flex;
   justify-content:center;
-  gap:20px;
-  margin:20px;
+  gap:25px;
+  margin:25px;
 }
 
 .cat{
@@ -53,15 +57,17 @@ header{
   padding:20px;
   border-radius:10px;
   text-align:center;
-  width:150px;
+  width:140px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .cat i{
   font-size:30px;
   color:#1e3a8a;
+  margin-bottom:8px;
 }
 
-/* LAYOUT PRINCIPAL */
+/* LAYOUT */
 .main{
   display:flex;
   gap:20px;
@@ -70,10 +76,11 @@ header{
 
 /* LOGIN IZQUIERDA */
 .sidebar{
-  width:250px;
+  width:260px;
   background:white;
   padding:20px;
   border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .sidebar h3{
@@ -93,9 +100,10 @@ header{
   background:#ff6a00;
   border:none;
   color:white;
+  cursor:pointer;
 }
 
-/* AUTOS */
+/* CONTENIDO */
 .content{
   flex:1;
 }
@@ -136,8 +144,9 @@ header{
   <div class="logo">NORTE <span>MOTOR</span></div>
 </header>
 
+<!-- BANNER LIMPIO -->
 <section class="hero">
-  <h1>Encontrá tu próximo vehículo</h1>
+  <h1>NORTE MOTOR</h1>
 </section>
 
 <!-- CATEGORIAS -->
@@ -164,7 +173,7 @@ header{
     <button onclick="recuperar()">Recuperar contraseña</button>
   </div>
 
-  <!-- DERECHA AUTOS -->
+  <!-- DERECHA -->
   <div class="content">
     <div id="autos" class="grid"></div>
   </div>
@@ -178,7 +187,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, se
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
+apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
   storageBucket: "norte-motor.firebasestorage.app",
@@ -186,7 +195,6 @@ const firebaseConfig = {
   appId: "1:192628890922:web:48bc1972f62216c3535253",
   measurementId: "G-BX1FCDC3P0"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
