@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { margin:0; font-family:Arial; background:#f1f5f9; }
+body { margin:0; font-family:Arial; background:#eef2f7; }
 
 /* HEADER */
 header {
@@ -15,22 +14,21 @@ header {
   color:white;
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:15px 30px;
+  align-items:center;
 }
-
 nav a {
   color:white;
   margin:10px;
   text-decoration:none;
 }
-
 .btn {
   background:#f97316;
   color:white;
   border:none;
-  padding:10px;
+  padding:10px 15px;
   cursor:pointer;
+  border-radius:5px;
 }
 
 /* HERO */
@@ -41,22 +39,16 @@ nav a {
   color:white;
   padding:120px 40px;
 }
-
 .hero h1 { font-size:45px; }
-.hero p { font-size:30px; font-weight:bold; }
+.hero p { font-size:28px; }
 
 /* BUSCADOR */
-.buscador {
-  margin-top:20px;
-}
-
 .buscador input {
   padding:10px;
   margin:5px;
   border:none;
   border-radius:5px;
 }
-
 .buscador button {
   background:#f97316;
   color:white;
@@ -70,7 +62,6 @@ nav a {
   justify-content:space-around;
   margin-top:-40px;
 }
-
 .cat {
   background:white;
   padding:20px;
@@ -79,13 +70,10 @@ nav a {
   width:120px;
   box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
-
 .cat img { width:50px; }
 
 /* SECCION */
 .section { padding:30px; }
-
-/* GRID */
 .grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -99,14 +87,45 @@ nav a {
   overflow:hidden;
   box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
-
 .card img {
   width:100%;
   height:160px;
   object-fit:cover;
 }
-
 .card-body { padding:10px; }
+
+/* DESTACADO */
+.destacado {
+  background:#1e3a8a;
+  color:white;
+  padding:10px;
+  font-size:12px;
+}
+
+/* BANNER */
+.banner {
+  background:#1e3a8a;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  padding:30px;
+  align-items:center;
+}
+.banner button {
+  background:#f97316;
+  border:none;
+  padding:15px;
+  color:white;
+}
+
+/* FOOTER */
+footer {
+  background:#1e3a8a;
+  color:white;
+  display:flex;
+  justify-content:space-around;
+  padding:30px;
+}
 
 /* MODAL */
 .modal {
@@ -118,19 +137,13 @@ nav a {
   justify-content:center;
   align-items:center;
 }
-
 .modal-content {
   background:white;
   padding:20px;
   border-radius:10px;
   width:300px;
 }
-
-input,select {
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
+input { width:100%; padding:10px; margin:5px 0; }
 </style>
 </head>
 
@@ -154,7 +167,6 @@ input,select {
 <section class="hero">
   <h1>Encontrá tu próximo vehículo</h1>
   <p>NORTE MOTOR</p>
-
   <div class="buscador">
     <input placeholder="¿Qué buscás?">
     <input placeholder="Modelo">
@@ -165,22 +177,15 @@ input,select {
 </section>
 
 <section class="categorias">
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/743/743922.png">
-    <p>Autos</p>
-  </div>
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/743/743131.png">
-    <p>Camionetas</p>
-  </div>
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
-    <p>Motos</p>
-  </div>
-  <div class="cat">
-    <img src="https://cdn-icons-png.flaticon.com/512/2062/2062177.png">
-    <p>Embarcaciones</p>
-  </div>
+  <div class="cat"><img src="https://cdn-icons-png.flaticon.com/512/743/743922.png"><p>Autos</p></div>
+  <div class="cat"><img src="https://cdn-icons-png.flaticon.com/512/743/743131.png"><p>Camionetas</p></div>
+  <div class="cat"><img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png"><p>Motos</p></div>
+  <div class="cat"><img src="https://cdn-icons-png.flaticon.com/512/2062/2062177.png"><p>Embarcaciones</p></div>
+</section>
+
+<section class="section">
+  <h2>Vehículos Destacados</h2>
+  <div id="destacados" class="grid"></div>
 </section>
 
 <section class="section">
@@ -188,15 +193,39 @@ input,select {
   <div id="cars" class="grid"></div>
 </section>
 
+<section class="banner">
+  <div>
+    <h2>¿Querés vender tu vehículo?</h2>
+    <p>Publicalo hoy mismo</p>
+  </div>
+  <button onclick="abrirPublicar()">Publicar Aviso</button>
+</section>
+
+<footer>
+  <div>
+    <h3>Norte Motor</h3>
+    <p>Compra y venta de vehículos</p>
+  </div>
+  <div>
+    <p>Autos</p>
+    <p>Camionetas</p>
+    <p>Motos</p>
+  </div>
+  <div>
+    <p>📞 341-1234567</p>
+    <p>📍 Rosario</p>
+  </div>
+</footer>
+
 <!-- LOGIN -->
 <div class="modal" id="loginModal">
   <div class="modal-content">
     <h3>Login</h3>
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Contraseña">
+    <input id="email">
+    <input id="pass" type="password">
     <button onclick="login()">Ingresar</button>
     <button onclick="registrar()">Registrarse</button>
-    <button onclick="recuperar()">Olvidé contraseña</button>
+    <button onclick="recuperar()">Recuperar</button>
   </div>
 </div>
 
@@ -204,11 +233,10 @@ input,select {
 <div class="modal" id="publicarModal">
   <div class="modal-content">
     <h3>Publicar</h3>
-    <input id="nombre" placeholder="Nombre">
-    <input id="precio" placeholder="Precio">
+    <input id="nombre">
+    <input id="precio">
     <input type="file" id="file">
-    <input id="telefono" placeholder="Teléfono">
-
+    <input id="telefono">
     <button onclick="publicar()">Publicar</button>
   </div>
 </div>
@@ -220,7 +248,7 @@ import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstati
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
+  apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor"
 };
@@ -230,26 +258,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// LOGIN
-window.login = () => {
- signInWithEmailAndPassword(auth,email.value,pass.value)
- .then(()=>alert("Bienvenido"))
- .catch(e=>alert(e.message));
-};
+window.login = ()=> signInWithEmailAndPassword(auth,email.value,pass.value).catch(e=>alert(e.message));
+window.registrar = ()=> createUserWithEmailAndPassword(auth,email.value,pass.value).catch(e=>alert(e.message));
+window.recuperar = ()=> sendPasswordResetEmail(auth,email.value);
 
-window.registrar = () => {
- createUserWithEmailAndPassword(auth,email.value,pass.value)
- .then(()=>alert("Usuario creado"))
- .catch(e=>alert(e.message));
-};
-
-window.recuperar = () => {
- sendPasswordResetEmail(auth,email.value)
- .then(()=>alert("Revisá tu correo"))
- .catch(e=>alert(e.message));
-};
-
-// PUBLICAR
 window.abrirPublicar = ()=>{
  if(!auth.currentUser) return alert("Debes iniciar sesión");
  publicarModal.style.display="flex";
@@ -258,7 +270,6 @@ window.abrirPublicar = ()=>{
 window.publicar = async ()=>{
  const archivo=file.files[0];
  const refImg=ref(storage,"autos/"+Date.now()+archivo.name);
-
  await uploadBytes(refImg,archivo);
  const url=await getDownloadURL(refImg);
 
@@ -266,30 +277,31 @@ window.publicar = async ()=>{
   nombre:nombre.value,
   precio:precio.value,
   img:url,
-  telefono:telefono.value
+  telefono:telefono.value,
+  destacado: Math.random() > 0.5
  });
-
- alert("Publicado");
- publicarModal.style.display="none";
 };
 
-// MOSTRAR AUTOS
 onSnapshot(collection(db,"autos"),snap=>{
  cars.innerHTML="";
+ destacados.innerHTML="";
+
  snap.forEach(d=>{
   let a=d.data();
 
-  cars.innerHTML+=`
+  let card=`
   <div class="card">
+    ${a.destacado ? '<div class="destacado">DESTACADO</div>' : ''}
     <img src="${a.img}">
     <div class="card-body">
       <h3>${a.nombre}</h3>
       <p>${a.precio}</p>
-      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">
-        Contactar
-      </a>
+      <a class="btn" href="https://wa.me/${a.telefono}" target="_blank">Contactar</a>
     </div>
   </div>`;
+
+  cars.innerHTML+=card;
+  if(a.destacado) destacados.innerHTML+=card;
  });
 });
 </script>
