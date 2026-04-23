@@ -4,32 +4,37 @@
 <meta charset="UTF-8">
 <title>Norte Motor</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body{margin:0;font-family:'Poppins';background:#eef2f7}
-header{background:#1e3a8a;height:90px;display:flex;align-items:center;justify-content:center}
-.logo{color:white;font-size:28px;font-weight:700}
+header{background:#1e3a8a;height:100px;display:flex;align-items:center;justify-content:center}
+.logo{color:white;font-size:32px;font-weight:700}
 .logo span{color:#ff6a00}
 
-.categorias{display:flex;gap:20px;justify-content:center;margin:20px}
-.cat{background:white;padding:15px;border-radius:10px;cursor:pointer}
+.categorias{display:flex;justify-content:center;gap:20px;margin:20px}
+.cat{background:white;padding:15px 20px;border-radius:10px;cursor:pointer;font-weight:600}
 
-#buscador{background:white;margin:20px;padding:15px;border-radius:10px}
-input,select{padding:8px;margin:5px}
+.main{display:flex;padding:20px;gap:20px}
 
-.main{display:flex;padding:20px}
 .sidebar{width:220px}
-.menu-btn{width:100%;padding:10px;margin-bottom:10px;background:#ff6a00;color:white;border:none}
+.menu-btn{width:100%;padding:12px;margin-bottom:10px;border:none;border-radius:6px;background:#ff6a00;color:white;cursor:pointer}
+.form{display:none;background:white;padding:10px;border-radius:10px}
+.form input{width:100%;padding:10px;margin:5px 0}
 
-.form{display:none;background:white;padding:10px;border-radius:10px;margin-bottom:10px}
+.content{flex:1}
 
-.grid{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+#buscador{background:white;padding:15px;border-radius:10px;margin-bottom:20px}
+#buscador input,#buscador select{padding:10px;margin:5px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 .card{background:white;border-radius:10px;overflow:hidden;cursor:pointer}
 .card img{width:100%;height:180px;object-fit:cover}
+.card-body{padding:10px}
+.price{color:#ff6a00;font-weight:700}
 
 #detalle{position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;display:none}
-.detalle-box{background:white;margin:50px auto;padding:20px;width:80%}
+.detalle-box{background:white;margin:50px auto;padding:20px;width:80%;max-width:600px}
 </style>
 </head>
 
@@ -47,9 +52,61 @@ input,select{padding:8px;margin:5px}
 <div class="cat" onclick="setCategoria('embarcaciones')">Embarcaciones</div>
 </div>
 
-<!-- FILTROS -->
+<div class="main">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
+<button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
+<button class="menu-btn" onclick="mostrar('recuperar')">Recuperar contraseña</button>
+
+<div id="login" class="form">
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Contraseña">
+<button onclick="loginUser()">Entrar</button>
+</div>
+
+<div id="registro" class="form">
+<input id="email2" placeholder="Email">
+<input id="pass2" type="password">
+<button onclick="registroUser()">Crear cuenta</button>
+</div>
+
+<div id="recuperar" class="form">
+<input id="email3" placeholder="Email">
+<button onclick="recuperarPass()">Enviar</button>
+</div>
+
+</div>
+
+<!-- CONTENIDO -->
+<div class="content">
+
 <div id="buscador">
+
 <select id="marca"></select>
+<input id="version" placeholder="Versión">
+
+<select id="transmision">
+<option value="">Transmisión</option>
+<option>Manual</option>
+<option>Automática</option>
+</select>
+
+<select id="combustible">
+<option value="">Combustible</option>
+<option>Nafta</option>
+<option>Diésel</option>
+<option>Híbrido</option>
+<option>Eléctrico</option>
+</select>
+
+<select id="estado">
+<option value="">Estado</option>
+<option>Nuevo</option>
+<option>Usado</option>
+</select>
 
 <input id="anioMin" placeholder="Año desde">
 <input id="anioMax" placeholder="Año hasta">
@@ -61,36 +118,12 @@ input,select{padding:8px;margin:5px}
 <input id="kmMax" placeholder="KM hasta">
 
 <button onclick="filtrar()">Buscar</button>
-</div>
-
-<div class="main">
-
-<div class="sidebar">
-
-<button class="menu-btn" onclick="toggleForm('login')">Ingresar</button>
-<button class="menu-btn" onclick="toggleForm('registro')">Registrarse</button>
-<button class="menu-btn" onclick="toggleForm('recuperar')">Recuperar contraseña</button>
-
-<div id="loginForm" class="form">
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Contraseña">
-<button onclick="login()">Ingresar</button>
-</div>
-
-<div id="registroForm" class="form">
-<input id="email2" placeholder="Email">
-<input id="pass2" type="password">
-<button onclick="registro()">Crear cuenta</button>
-</div>
-
-<div id="recuperarForm" class="form">
-<input id="email3" placeholder="Email">
-<button onclick="recuperar()">Enviar mail</button>
-</div>
 
 </div>
 
 <div id="autos" class="grid"></div>
+
+</div>
 
 </div>
 
@@ -122,49 +155,40 @@ let categoria="";
 
 /* MARCAS POR CATEGORIA */
 const marcas={
-autos:["Toyota","Ford","Chevrolet","Volkswagen","Fiat","Renault","Peugeot","Honda","Nissan","BYD","Chery"],
-motos:["Yamaha","Honda","Zanella","Motomel","Gilera","Royal Enfield","Benelli"],
-camiones:["Iveco","Scania","Mercedes-Benz","Volvo","Foton","JAC"],
-embarcaciones:["Yamaha","Mercury","Honda","Suzuki"]
+autos:["Toyota","Ford","Chevrolet","Volkswagen","Fiat","Renault","Peugeot","Honda","Nissan","BYD","Chery","Geely"],
+motos:["Yamaha","Honda","Zanella","Motomel","Gilera","Royal Enfield","Benelli","CFMoto"],
+camiones:["Iveco","Scania","Mercedes-Benz","Volvo","MAN","Foton","JAC","Dongfeng"],
+embarcaciones:["Yamaha","Mercury","Honda","Suzuki","Tohatsu"]
 };
 
-/* CATEGORIA */
 window.setCategoria=(c)=>{
 categoria=c;
-marca.innerHTML=`<option value="">Marca</option>`;
+marca.innerHTML='<option value="">Marca</option>';
 marcas[c].forEach(m=>{
 marca.innerHTML+=`<option>${m}</option>`;
 });
 filtrar();
 };
 
-/* LOGIN */
-window.login=async()=>{
+/* AUTH */
+window.loginUser=async()=>{
 await signInWithEmailAndPassword(auth,email.value,pass.value);
 alert("Bienvenido");
 };
 
-/* REGISTRO */
-window.registro=async()=>{
+window.registroUser=async()=>{
 await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
 alert("Cuenta creada");
 };
 
-/* RECUPERAR */
-window.recuperar=async()=>{
+window.recuperarPass=async()=>{
 await sendPasswordResetEmail(auth,email3.value);
 alert("Revisá tu mail");
 };
 
-/* UI */
-window.toggleForm=(tipo)=>{
-loginForm.style.display="none";
-registroForm.style.display="none";
-recuperarForm.style.display="none";
-
-if(tipo==="login") loginForm.style.display="block";
-if(tipo==="registro") registroForm.style.display="block";
-if(tipo==="recuperar") recuperarForm.style.display="block";
+window.mostrar=(id)=>{
+document.querySelectorAll(".form").forEach(f=>f.style.display="none");
+document.getElementById(id).style.display="block";
 };
 
 /* FILTRAR */
@@ -177,6 +201,11 @@ const a=doc.data();
 
 if(categoria && a.categoria!==categoria)return;
 if(marca.value && a.marca!==marca.value)return;
+if(version.value && !a.version?.toLowerCase().includes(version.value.toLowerCase()))return;
+
+if(transmision.value && a.transmision!==transmision.value)return;
+if(combustible.value && a.combustible!==combustible.value)return;
+if(estado.value && a.estado!==estado.value)return;
 
 if(anioMin.value && a.anio<anioMin.value)return;
 if(anioMax.value && a.anio>anioMax.value)return;
@@ -190,8 +219,10 @@ if(kmMax.value && a.km>kmMax.value)return;
 autos.innerHTML+=`
 <div class="card" onclick="verDetalle('${doc.id}')">
 <img src="${a.imagenes?.[0]||''}">
+<div class="card-body">
 <h3>${a.nombre}</h3>
-<p>$${a.precio}</p>
+<div class="price">$${a.precio}</div>
+</div>
 </div>`;
 });
 };
@@ -210,7 +241,7 @@ ${a.imagenes.map(i=>`<img src="${i}">`).join("")}
 <p>${a.descripcion}</p>
 
 <a href="https://wa.me/${a.telefono}" target="_blank">
-<button>WhatsApp</button>
+<button>Contactar por WhatsApp</button>
 </a>
 
 <button onclick="detalle.style.display='none'">Cerrar</button>
