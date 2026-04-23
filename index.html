@@ -4,23 +4,25 @@
 <meta charset="UTF-8">
 <title>Norte Motor</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 body{margin:0;font-family:'Poppins';background:#eef2f7}
-header{background:#1e3a8a;height:90px;display:flex;justify-content:center;align-items:center}
+header{background:#1e3a8a;height:90px;display:flex;align-items:center;justify-content:center}
 .logo{color:white;font-size:28px;font-weight:700}
 .logo span{color:#ff6a00}
 
 .categorias{display:flex;gap:20px;justify-content:center;margin:20px}
 .cat{background:white;padding:15px;border-radius:10px;cursor:pointer}
 
-#buscador{background:white;padding:15px;margin:20px;border-radius:10px}
+#buscador{background:white;margin:20px;padding:15px;border-radius:10px}
 input,select{padding:8px;margin:5px}
 
 .main{display:flex;padding:20px}
-.sidebar{width:200px}
-.menu-btn{width:100%;margin-bottom:10px;padding:10px;background:#ff6a00;color:white;border:none}
+.sidebar{width:220px}
+.menu-btn{width:100%;padding:10px;margin-bottom:10px;background:#ff6a00;color:white;border:none}
+
+.form{display:none;background:white;padding:10px;border-radius:10px;margin-bottom:10px}
 
 .grid{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 .card{background:white;border-radius:10px;overflow:hidden;cursor:pointer}
@@ -47,19 +49,45 @@ input,select{padding:8px;margin:5px}
 
 <!-- FILTROS -->
 <div id="buscador">
+<select id="marca"></select>
+
 <input id="anioMin" placeholder="Año desde">
 <input id="anioMax" placeholder="Año hasta">
+
 <input id="precioMin" placeholder="Precio desde">
 <input id="precioMax" placeholder="Precio hasta">
+
 <input id="kmMin" placeholder="KM desde">
 <input id="kmMax" placeholder="KM hasta">
+
 <button onclick="filtrar()">Buscar</button>
 </div>
 
 <div class="main">
 
 <div class="sidebar">
-<button class="menu-btn" onclick="login()">Ingresar</button>
+
+<button class="menu-btn" onclick="toggleForm('login')">Ingresar</button>
+<button class="menu-btn" onclick="toggleForm('registro')">Registrarse</button>
+<button class="menu-btn" onclick="toggleForm('recuperar')">Recuperar contraseña</button>
+
+<div id="loginForm" class="form">
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Contraseña">
+<button onclick="login()">Ingresar</button>
+</div>
+
+<div id="registroForm" class="form">
+<input id="email2" placeholder="Email">
+<input id="pass2" type="password">
+<button onclick="registro()">Crear cuenta</button>
+</div>
+
+<div id="recuperarForm" class="form">
+<input id="email3" placeholder="Email">
+<button onclick="recuperar()">Enviar mail</button>
+</div>
+
 </div>
 
 <div id="autos" class="grid"></div>
@@ -74,7 +102,7 @@ input,select{padding:8px;margin:5px}
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const app = initializeApp({
@@ -92,18 +120,51 @@ const auth=getAuth(app);
 
 let categoria="";
 
-/* LOGIN SIMPLE */
-window.login=async()=>{
-let email=prompt("Email");
-let pass=prompt("Password");
-await signInWithEmailAndPassword(auth,email,pass);
-alert("Logueado");
+/* MARCAS POR CATEGORIA */
+const marcas={
+autos:["Toyota","Ford","Chevrolet","Volkswagen","Fiat","Renault","Peugeot","Honda","Nissan","BYD","Chery"],
+motos:["Yamaha","Honda","Zanella","Motomel","Gilera","Royal Enfield","Benelli"],
+camiones:["Iveco","Scania","Mercedes-Benz","Volvo","Foton","JAC"],
+embarcaciones:["Yamaha","Mercury","Honda","Suzuki"]
 };
 
-/* SET CATEGORIA */
+/* CATEGORIA */
 window.setCategoria=(c)=>{
 categoria=c;
+marca.innerHTML=`<option value="">Marca</option>`;
+marcas[c].forEach(m=>{
+marca.innerHTML+=`<option>${m}</option>`;
+});
 filtrar();
+};
+
+/* LOGIN */
+window.login=async()=>{
+await signInWithEmailAndPassword(auth,email.value,pass.value);
+alert("Bienvenido");
+};
+
+/* REGISTRO */
+window.registro=async()=>{
+await createUserWithEmailAndPassword(auth,email2.value,pass2.value);
+alert("Cuenta creada");
+};
+
+/* RECUPERAR */
+window.recuperar=async()=>{
+await sendPasswordResetEmail(auth,email3.value);
+alert("Revisá tu mail");
+};
+
+/* UI */
+window.toggleForm=(tipo)=>{
+loginForm.style.display="none";
+registroForm.style.display="none";
+recuperarForm.style.display="none";
+
+if(tipo==="login") loginForm.style.display="block";
+if(tipo==="registro") registroForm.style.display="block";
+if(tipo==="recuperar") recuperarForm.style.display="block";
 };
 
 /* FILTRAR */
@@ -112,9 +173,10 @@ const data=await getDocs(collection(db,"autos"));
 autos.innerHTML="";
 
 data.forEach(doc=>{
-let a=doc.data();
+const a=doc.data();
 
 if(categoria && a.categoria!==categoria)return;
+if(marca.value && a.marca!==marca.value)return;
 
 if(anioMin.value && a.anio<anioMin.value)return;
 if(anioMax.value && a.anio>anioMax.value)return;
@@ -139,16 +201,18 @@ window.verDetalle=async(id)=>{
 const data=await getDocs(collection(db,"autos"));
 data.forEach(doc=>{
 if(doc.id===id){
-let a=doc.data();
+const a=doc.data();
 
 detalle.style.display="block";
 detalleContenido.innerHTML=`
 <h2>${a.nombre}</h2>
 ${a.imagenes.map(i=>`<img src="${i}">`).join("")}
 <p>${a.descripcion}</p>
+
 <a href="https://wa.me/${a.telefono}" target="_blank">
 <button>WhatsApp</button>
 </a>
+
 <button onclick="detalle.style.display='none'">Cerrar</button>
 `;
 }
