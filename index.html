@@ -11,18 +11,46 @@ body{
     background:#f4f6f9;
 }
 
-/* HEADER */
-header{
-    background:#1e3c72;
-    color:white;
-    padding:25px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
+/* HEADER CON BANNER */
+.header{
+    height:260px;
+    background:url('img/banner.jpg') center/cover no-repeat;
+    position:relative;
 }
 
-header span{
+.header::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+}
+
+.nav{
+    position:absolute;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 40px;
+    z-index:2;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:white;
+}
+
+.logo span{
     color:#ff7a00;
+}
+
+.menu a{
+    color:white;
+    margin-left:20px;
+    text-decoration:none;
+    font-weight:bold;
 }
 
 /* CONTENEDOR */
@@ -31,7 +59,7 @@ header span{
     padding:30px;
 }
 
-/* PANEL IZQUIERDO */
+/* IZQUIERDA */
 .left{
     width:220px;
 }
@@ -48,7 +76,7 @@ header span{
     border-radius:5px;
 }
 
-/* CONTENIDO */
+/* MAIN */
 .main{
     flex:1;
     padding-left:30px;
@@ -115,20 +143,30 @@ header span{
 
 <body>
 
-<header>
-    NORTE <span>MOTOR</span>
-</header>
+<!-- HEADER -->
+<div class="header">
+    <div class="nav">
+        <div class="logo">
+            NORTE <span>MOTOR</span>
+        </div>
 
+        <div class="menu">
+            <a href="#">Inicio</a>
+            <a href="#">Autos</a>
+            <a href="#">Camionetas</a>
+            <a href="#">Motos</a>
+            <a href="#">Embarcaciones</a>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENIDO -->
 <div class="container">
 
-    <!-- IZQUIERDA -->
-    <div class="left">
-        <button>Ingresar</button>
-        <button>Registrarse</button>
-        <button>Recuperar contraseña</button>
-    </div>
+    <!-- PANEL IZQUIERDO -->
+    <div class="left"></div>
 
-    <!-- DERECHA -->
+    <!-- CONTENIDO -->
     <div class="main">
 
         <div class="categorias">
@@ -182,11 +220,102 @@ header span{
 
 <script>
 
+/* LOGIN / USUARIOS */
+
+function registrar(){
+    let email = prompt("Email");
+    let pass = prompt("Contraseña");
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    usuarios.push({email, pass});
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+    alert("Registrado");
+}
+
+function login(){
+    let email = prompt("Email");
+    let pass = prompt("Contraseña");
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    let user = usuarios.find(u => u.email === email && u.pass === pass);
+
+    if(user){
+        localStorage.setItem("session", email);
+        actualizarUI();
+        alert("Bienvenido");
+    }else{
+        alert("Error");
+    }
+}
+
+function logout(){
+    localStorage.removeItem("session");
+    actualizarUI();
+}
+
+function recuperar(){
+    alert("Te enviaremos instrucciones por email");
+}
+
+function actualizarUI(){
+    let user = localStorage.getItem("session");
+    let left = document.querySelector(".left");
+
+    if(user){
+        left.innerHTML = `
+            <button onclick="logout()">Cerrar sesión</button>
+            <button onclick="publicar()">Publicar</button>
+        `;
+    }else{
+        left.innerHTML = `
+            <button onclick="login()">Ingresar</button>
+            <button onclick="registrar()">Registrarse</button>
+            <button onclick="recuperar()">Recuperar contraseña</button>
+        `;
+    }
+}
+
+/* PUBLICAR */
+
+function publicar(){
+    let titulo = prompt("Título");
+    let precio = prompt("Precio");
+
+    let autos = JSON.parse(localStorage.getItem("autos")) || [];
+
+    autos.push({
+        titulo,
+        precio,
+        fecha: new Date().getTime()
+    });
+
+    localStorage.setItem("autos", JSON.stringify(autos));
+    alert("Publicado (30 días activo)");
+}
+
+/* LIMPIEZA 30 DIAS */
+
+function limpiar(){
+    let ahora = new Date().getTime();
+    let autos = JSON.parse(localStorage.getItem("autos")) || [];
+
+    autos = autos.filter(a => {
+        let dias = (ahora - a.fecha) / (1000*60*60*24);
+        return dias < 30;
+    });
+
+    localStorage.setItem("autos", JSON.stringify(autos));
+}
+
+/* MARCAS */
+
 const marcas = {
     autos: ["Toyota","Ford","Chevrolet","Volkswagen","Fiat","Renault","Peugeot","Citroen","Jeep","Honda","Chery","BYD","Geely","Great Wall"],
-    motos: ["Honda","Yamaha","Zanella","Motomel","Corven","Kawasaki","Suzuki","Royal Enfield","CFMoto","Voge"],
+    motos: ["Honda","Yamaha","Zanella","Motomel","Kawasaki","Suzuki","CFMoto","Voge"],
     camiones: ["Scania","Iveco","Mercedes-Benz","Volvo","Ford","Foton","JAC","Shacman"],
-    embarcaciones: ["Yamaha","Mercury","Honda Marine","Evinrude","Suzuki Marine","Bayliner","Quicksilver"]
+    embarcaciones: ["Yamaha","Mercury","Honda Marine","Suzuki Marine","Bayliner","Quicksilver"]
 };
 
 function cargar(tipo){
@@ -200,10 +329,14 @@ function cargar(tipo){
     });
 }
 
-/* CARGA INICIAL */
+/* INIT */
+
 cargar("autos");
+actualizarUI();
+limpiar();
 
 </script>
 
 </body>
+</html>
 </html>
