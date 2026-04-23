@@ -271,8 +271,17 @@ function render(){
 let cont = document.getElementById("listado");
 cont.innerHTML="";
 
-let autos = JSON.parse(localStorage.getItem("autos")) || [];
-
+autos.forEach((a,i)=>{
+cont.innerHTML += `
+<div class="card" onclick="verDetalle(${i})">
+<img src="${a.img}">
+<div class="card-body">
+<h3>${a.titulo}</h3>
+<div class="precio">${a.precio}</div>
+</div>
+</div>
+`;
+});
 if(autos.length===0){
 autos = [
 {titulo:"Toyota Hilux",precio:"20.000 USD",img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d",tel:"341111111"},
