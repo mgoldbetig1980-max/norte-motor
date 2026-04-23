@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,51 +5,29 @@
 <title>Norte Motor</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 body{margin:0;font-family:'Poppins';background:#eef2f7}
 header{background:#1e3a8a;height:90px;display:flex;justify-content:center;align-items:center}
 .logo{color:white;font-size:28px;font-weight:700}
 .logo span{color:#ff6a00}
-.hero{height:200px;background:#1e3a8a}
 
-.categorias{display:flex;justify-content:center;gap:20px;margin:20px}
-.cat{background:white;padding:20px;border-radius:10px;width:120px;text-align:center;cursor:pointer}
+.categorias{display:flex;gap:20px;justify-content:center;margin:20px}
+.cat{background:white;padding:15px;border-radius:10px;cursor:pointer}
 
-.main{display:flex;padding:20px;gap:20px}
-.sidebar{width:250px}
-.menu-btn{width:100%;padding:12px;margin-bottom:10px;background:#ff6a00;color:white;border:none;border-radius:6px}
+#buscador{background:white;padding:15px;margin:20px;border-radius:10px}
+input,select{padding:8px;margin:5px}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.main{display:flex;padding:20px}
+.sidebar{width:200px}
+.menu-btn{width:100%;margin-bottom:10px;padding:10px;background:#ff6a00;color:white;border:none}
+
+.grid{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 .card{background:white;border-radius:10px;overflow:hidden;cursor:pointer}
 .card img{width:100%;height:180px;object-fit:cover}
-.card-body{padding:10px}
-.price{color:#ff6a00;font-weight:700}
 
-/* MODAL */
-#detalle{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.8);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.detalle-box{
-background:white;
-padding:20px;
-border-radius:10px;
-width:80%;
-max-width:600px;
-}
-
-.detalle-box img{
-width:100%;
-margin-bottom:10px;
-}
+#detalle{position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;display:none}
+.detalle-box{background:white;margin:50px auto;padding:20px;width:80%}
 </style>
 </head>
 
@@ -60,42 +37,33 @@ margin-bottom:10px;
 <div class="logo">NORTE <span>MOTOR</span></div>
 </header>
 
-<section class="hero"></section>
-
+<!-- CATEGORIAS -->
 <div class="categorias">
-<div class="cat" onclick="abrirBuscador('autos')">Autos</div>
-<div class="cat" onclick="abrirBuscador('motos')">Motos</div>
-<div class="cat" onclick="abrirBuscador('camiones')">Camiones</div>
-<div class="cat" onclick="abrirBuscador('embarcaciones')">Embarcaciones</div>
+<div class="cat" onclick="setCategoria('autos')">Autos</div>
+<div class="cat" onclick="setCategoria('motos')">Motos</div>
+<div class="cat" onclick="setCategoria('camiones')">Camiones</div>
+<div class="cat" onclick="setCategoria('embarcaciones')">Embarcaciones</div>
+</div>
+
+<!-- FILTROS -->
+<div id="buscador">
+<input id="anioMin" placeholder="Año desde">
+<input id="anioMax" placeholder="Año hasta">
+<input id="precioMin" placeholder="Precio desde">
+<input id="precioMax" placeholder="Precio hasta">
+<input id="kmMin" placeholder="KM desde">
+<input id="kmMax" placeholder="KM hasta">
+<button onclick="filtrar()">Buscar</button>
 </div>
 
 <div class="main">
 
 <div class="sidebar">
-<button class="menu-btn" onclick="mostrar('login')">Ingresar</button>
-<button class="menu-btn" onclick="mostrar('registro')">Registrarse</button>
-<button class="menu-btn" onclick="mostrar('recuperar')">Recuperar</button>
-<button class="menu-btn" onclick="togglePublicar()">Publicar</button>
+<button class="menu-btn" onclick="login()">Ingresar</button>
 </div>
 
-<div class="content">
 <div id="autos" class="grid"></div>
-</div>
 
-</div>
-
-<!-- PANEL PUBLICAR -->
-<div id="panelPublicar" style="display:none;padding:20px;background:white;margin:20px;">
-<input id="nombrePub" placeholder="Título">
-<input id="precioPub" placeholder="Precio">
-<input id="anioPub" placeholder="Año">
-<input id="kmPub" placeholder="KM">
-<textarea id="descripcionPub" placeholder="Descripción"></textarea>
-<input id="vendedorPub" placeholder="Nombre">
-<input id="telefonoPub" placeholder="WhatsApp">
-
-<input type="file" id="imagenes" multiple>
-<button onclick="publicar()">Publicar</button>
 </div>
 
 <!-- DETALLE -->
@@ -106,11 +74,10 @@ margin-bottom:10px;
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
+const app = initializeApp({
 apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   authDomain: "norte-motor.firebaseapp.com",
   projectId: "norte-motor",
@@ -120,97 +87,75 @@ apiKey: "AIzaSyDlaUPbwiElmfhB6LtwpfXi6q9lIgM7cFE",
   measurementId: "G-BX1FCDC3P0"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const storage = getStorage(app);
+const db=getFirestore(app);
+const auth=getAuth(app);
 
-let categoriaActual="";
+let categoria="";
 
-/* PUBLICAR */
-window.publicar = async ()=>{
-if(!auth.currentUser){
-alert("Iniciá sesión");
-return;
-}
-
-const files = Array.from(imagenes.files);
-let urls=[];
-
-for(let f of files){
-const r=ref(storage,"autos/"+Date.now()+f.name);
-await uploadBytes(r,f);
-urls.push(await getDownloadURL(r));
-}
-
-let hoy=new Date();
-let venc=new Date();
-venc.setDate(hoy.getDate()+30);
-
-await addDoc(collection(db,"autos"),{
-categoria:categoriaActual,
-nombre:nombrePub.value,
-precio:Number(precioPub.value),
-anio:Number(anioPub.value),
-km:Number(kmPub.value),
-descripcion:descripcionPub.value,
-vendedor:vendedorPub.value,
-telefono:telefonoPub.value,
-imagenes:urls,
-userId:auth.currentUser.uid,
-vencimiento:venc
-});
-
-alert("Publicado");
+/* LOGIN SIMPLE */
+window.login=async()=>{
+let email=prompt("Email");
+let pass=prompt("Password");
+await signInWithEmailAndPassword(auth,email,pass);
+alert("Logueado");
 };
 
-/* CARGAR */
-async function cargarAutos(){
+/* SET CATEGORIA */
+window.setCategoria=(c)=>{
+categoria=c;
+filtrar();
+};
+
+/* FILTRAR */
+window.filtrar=async()=>{
 const data=await getDocs(collection(db,"autos"));
 autos.innerHTML="";
 
-data.forEach(docu=>{
-const a=docu.data();
-const hoy=new Date();
-if(a.vencimiento && a.vencimiento.toDate()<hoy)return;
+data.forEach(doc=>{
+let a=doc.data();
+
+if(categoria && a.categoria!==categoria)return;
+
+if(anioMin.value && a.anio<anioMin.value)return;
+if(anioMax.value && a.anio>anioMax.value)return;
+
+if(precioMin.value && a.precio<precioMin.value)return;
+if(precioMax.value && a.precio>precioMax.value)return;
+
+if(kmMin.value && a.km<kmMin.value)return;
+if(kmMax.value && a.km>kmMax.value)return;
 
 autos.innerHTML+=`
-<div class="card" onclick="verDetalle(${JSON.stringify(a).replace(/"/g,'&quot;')})">
-<img src="${a.imagenes[0]}">
-<div class="card-body">
+<div class="card" onclick="verDetalle('${doc.id}')">
+<img src="${a.imagenes?.[0]||''}">
 <h3>${a.nombre}</h3>
-<div class="price">$${a.precio}</div>
-</div>
+<p>$${a.precio}</p>
 </div>`;
 });
-}
-
-cargarAutos();
+};
 
 /* DETALLE */
-window.verDetalle = (a)=>{
-detalle.style.display="flex";
+window.verDetalle=async(id)=>{
+const data=await getDocs(collection(db,"autos"));
+data.forEach(doc=>{
+if(doc.id===id){
+let a=doc.data();
 
+detalle.style.display="block";
 detalleContenido.innerHTML=`
 <h2>${a.nombre}</h2>
 ${a.imagenes.map(i=>`<img src="${i}">`).join("")}
 <p>${a.descripcion}</p>
-<p><b>Año:</b> ${a.anio}</p>
-<p><b>KM:</b> ${a.km}</p>
-
 <a href="https://wa.me/${a.telefono}" target="_blank">
-<button>Contactar por WhatsApp</button>
+<button>WhatsApp</button>
 </a>
-
 <button onclick="detalle.style.display='none'">Cerrar</button>
 `;
+}
+});
 };
 
-/* UI */
-window.togglePublicar=()=>{
-panelPublicar.style.display=
-panelPublicar.style.display==="none"?"block":"none";
-};
+filtrar();
 
 </script>
 
