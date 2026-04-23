@@ -114,6 +114,11 @@ body{
     border-radius:10px;
     overflow:hidden;
     box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    cursor:pointer;
+    transition:0.2s;
+}
+.card:hover{
+    transform:scale(1.03);
 }
 .card img{
     width:100%;
@@ -123,22 +128,9 @@ body{
 .card-body{
     padding:15px;
 }
-.card h3{
-    margin:0;
-}
 .precio{
     color:#ff7a00;
     font-weight:bold;
-    margin:10px 0;
-}
-.btn{
-    display:block;
-    text-align:center;
-    background:#25d366;
-    color:white;
-    padding:10px;
-    text-decoration:none;
-    border-radius:5px;
 }
 
 /* RESPONSIVE */
@@ -192,7 +184,6 @@ body{
 </div>
 
 <h2>Vehículos publicados</h2>
-
 <div class="grid" id="listado"></div>
 
 </div>
@@ -266,10 +257,25 @@ localStorage.setItem("autos",JSON.stringify(autos));
 render();
 }
 
+/* DETALLE */
+function verDetalle(index){
+localStorage.setItem("detalle", index);
+window.location.href = "detalle.html";
+}
+
 /* LISTADO */
 function render(){
 let cont = document.getElementById("listado");
 cont.innerHTML="";
+
+let autos = JSON.parse(localStorage.getItem("autos")) || [];
+
+if(autos.length===0){
+autos = [
+{titulo:"Toyota Hilux",precio:"20.000 USD",img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d",tel:"341111111"},
+{titulo:"Ford Ranger",precio:"18.000 USD",img:"https://images.unsplash.com/photo-1549921296-3a6b0d64c9f6",tel:"341222222"}
+];
+}
 
 autos.forEach((a,i)=>{
 cont.innerHTML += `
@@ -282,33 +288,11 @@ cont.innerHTML += `
 </div>
 `;
 });
-if(autos.length===0){
-autos = [
-{titulo:"Toyota Hilux",precio:"20.000 USD",img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d",tel:"341111111"},
-{titulo:"Ford Ranger",precio:"18.000 USD",img:"https://images.unsplash.com/photo-1549921296-3a6b0d64c9f6",tel:"341222222"}
-];
-}
-
-autos.forEach(a=>{
-cont.innerHTML += `
-<div class="card">
-<img src="${a.img}">
-<div class="card-body">
-<h3>${a.titulo}</h3>
-<div class="precio">${a.precio}</div>
-<a class="btn" target="_blank"
-href="https://wa.me/54${a.tel}?text=Consulta por ${a.titulo}">
-WhatsApp
-</a>
-</div>
-</div>
-`;
-});
 }
 
 /* MARCAS */
 const marcas = {
-autos:["Toyota","Ford","VW","Chevrolet","Fiat","Renault","Peugeot","Chery","BYD"],
+autos:["Toyota","Ford","Volkswagen","Chevrolet","Fiat","Renault","Peugeot","Chery","BYD","Geely"],
 motos:["Honda","Yamaha","Zanella","Motomel","CFMoto"],
 camiones:["Scania","Iveco","Volvo","Foton","JAC"],
 embarcaciones:["Yamaha","Mercury","Honda Marine"]
