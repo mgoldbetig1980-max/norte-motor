@@ -147,7 +147,13 @@ let combustible = prompt("Combustible");
 let transmision = prompt("Transmisión");
 let precio = prompt("Precio");
 let tel = prompt("WhatsApp vendedor");
-let img = prompt("URL imagen");
+
+/* 🔥 MULTIPLES FOTOS */
+let fotos = prompt("Pegá URLs de imágenes separadas por coma");
+
+/* convertimos a array */
+let imagenes = fotos.split(",");
+
 let desc = prompt("Descripción");
 
 let autos = JSON.parse(localStorage.getItem("autos")) || [];
@@ -161,13 +167,14 @@ combustible,
 transmision,
 precio,
 tel,
-img,
+imagenes,
 desc,
 fecha:new Date().getTime()
 });
 
 localStorage.setItem("autos",JSON.stringify(autos));
 render();
+}
 }
 
 /* DETALLE */
