@@ -241,15 +241,31 @@ actualizarUI();
 
 /* PUBLICAR */
 function publicar(){
-let titulo = prompt("Título");
+
+let marca = prompt("Marca");
+let modelo = prompt("Modelo");
+let año = prompt("Año");
+let km = prompt("Kilometraje");
+let combustible = prompt("Combustible");
+let transmision = prompt("Transmisión");
 let precio = prompt("Precio");
-let img = prompt("URL imagen");
 let tel = prompt("WhatsApp vendedor");
+let img = prompt("URL imagen");
+let desc = prompt("Descripción");
 
 let autos = JSON.parse(localStorage.getItem("autos")) || [];
 
 autos.push({
-titulo,precio,img,tel,
+marca,
+modelo,
+año,
+km,
+combustible,
+transmision,
+precio,
+tel,
+img,
+desc,
 fecha:new Date().getTime()
 });
 
